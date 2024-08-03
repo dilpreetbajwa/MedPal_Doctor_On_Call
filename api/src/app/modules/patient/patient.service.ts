@@ -47,17 +47,20 @@ const updatePatient = async (req: Request): Promise<any> => {
     const id = req.params.id as string;
     const user = JSON.parse(req.body.data)
     if (file) {
-        // const uploadImage = await CloudinaryHelper.uploadFile(file);
-        // if (uploadImage) {
-        //     user.img = uploadImage.secure_url
-        // } else {
-        //     throw new ApiError(httpStatus.EXPECTATION_FAILED, 'Failed to updateImage !!')
-        // }
+        const uploadImage = await CloudinaryHelper.uploadFile(file);
+        if (uploadImage) {
+            user.img = uploadImage.secure_url
+        } else {
+            throw new ApiError(httpStatus.EXPECTATION_FAILED, 'Failed to updateImage !!')
+        }
     }
-    const result = await Patient.updateOne({
-        where: { id },
-        data: user
-    })
+
+
+    const result = await Patient.updateOne(
+        { _id: id },
+        { $set: { ...user } },
+        { upsert: true }
+    )
     return result;
 }
 

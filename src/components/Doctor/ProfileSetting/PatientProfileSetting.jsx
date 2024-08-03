@@ -25,9 +25,10 @@ const PatientProfileSetting = () => {
         setDate(moment(dateString).format());
     };
 
+    console.log(data);
     useEffect(() => {
         if (data) {
-            setUserId(data.id)
+            setUserId(data._id)
             setSelectBloodGroup(data?.bloodGroup)
         }
     }, [data]);

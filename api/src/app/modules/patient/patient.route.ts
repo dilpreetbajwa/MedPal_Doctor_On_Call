@@ -11,8 +11,8 @@ router.post('/', PatientController.createPatient);
 router.get('/:id', PatientController.getPatient);
 router.delete('/:id', PatientController.deletePatient);
 router.patch('/:id',
-    // CloudinaryHelper.upload.single('file'),
-    // auth(AuthUser.PATIENT),
+     CloudinaryHelper.upload.single('file'),
+     auth(AuthUser.PATIENT),
     (req: Request, res: Response, next: NextFunction) => {
         return PatientController.updatePatient(req, res, next)
     }
