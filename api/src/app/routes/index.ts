@@ -42,10 +42,10 @@ const moduleRoutes = [
     //     path: '/favourite',
     //     route: FavouriteRouter,
     // },
-    // {
-    //     path: '/timeslot',
-    //     route: DoctorTimeSlotRouter,
-    // },
+    {
+        path: '/timeslot',
+        route: DoctorTimeSlotRouter,
+    },
     // {
     //     path: '/blogs',
     //     route: BlogRoutes,

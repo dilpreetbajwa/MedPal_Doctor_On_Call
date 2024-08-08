@@ -1,14 +1,14 @@
 import { Schema, model } from 'mongoose';
-const prescriptionSchema = new Schema ({
+
+const ScheduleDaySchema = new Schema ({
     startTime: { type: String, required: false },
     endTime: { type: String, required: false },
-    doctorTimeSlotId: { type: String, required: false },
     },
     { timestamps: true }
 );
 
 
 // creating the model
-const Prescription = model('Prescription', prescriptionSchema);
+const ScheduleDay = model('ScheduleDay', ScheduleDaySchema);
 
-export default Prescription;
+export default ScheduleDay;

@@ -20,7 +20,9 @@ const Schedule = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const showModal = () => { setIsModalOpen(!isModalOpen) };
     const handleCancel = () => { setIsModalOpen(false) };
-    const showEditModal = () => { setIsEditModalOpen(!isEditModalOpen) };
+    const showEditModal = () => { 
+        
+        setIsEditModalOpen(!isEditModalOpen) };
 
     const handleEditOk = () => {
         if (editTimeSlot.length > 0) {
@@ -95,15 +97,17 @@ const Schedule = () => {
         setIsModalOpen(AIsLoading ? true : false)
     };
     useEffect(() => {
+          
         if (!AIsLoading && AIsError) {
             message.error(error?.data?.message)
         }
         if (isSuccess) {
             message.success('Successfully Add Time Slots')
         }
-    }, [isSuccess, AIsError, error?.data?.message, AIsLoading])
+    }, [isSuccess, AIsError, error?.data?.message, AIsLoading,data])
 
     const handleStartTime = (id, time, timeString) => {
+        console.log(timeString);
         setAddTimeSlot(prev => (prev.map(item => item.id === id ? { ...item, startTime: timeString } : item)));
     }
 
@@ -116,7 +120,8 @@ const Schedule = () => {
     }
 
     useEffect(() => {
-        if (data && data[0]?.id) {
+        if (data && data[0]?._id) {
+            
             setTimeSlot(data[0].timeSlot)
         }
     }, [data])
@@ -138,6 +143,8 @@ const Schedule = () => {
         setAddTimeSlot([...addTimeSlot, { id: newId }])
         e.preventDefault();
     }
+
+    console.log(timeSlot);
 
     let content = null;
     if (!isLoading && isError) content = <div>Something Went Wrong !</div>
