@@ -1,5 +1,16 @@
-import { Schema, model } from 'mongoose';
-import { IDoctorTimeSlott } from './doctorTimeSlot.interface';
+import { Schema, model, Document } from 'mongoose';
+// import { IDoctorTimeSlot } from './doctorTimeSlot.interface';
+import { IScheduleDay } from '../../models/scheduledday.model';
+
+
+
+export interface IDoctorTimeSlot extends Document {
+    doctorId: string;
+    day: string;
+    timeSlot: IScheduleDay[];
+    weekDay?: string;
+    maximumPatient?: string;
+}
 
 
 const DoctorTimeSlotSchema = new Schema ({
@@ -19,6 +30,6 @@ const DoctorTimeSlotSchema = new Schema ({
 
 
 // creating the model
-const DoctorTimeSlot = model<IDoctorTimeSlott>('DoctorTimeSlot', DoctorTimeSlotSchema);
+const DoctorTimeSlot = model<IDoctorTimeSlot>('DoctorTimeSlot', DoctorTimeSlotSchema);
 
 export default DoctorTimeSlot;

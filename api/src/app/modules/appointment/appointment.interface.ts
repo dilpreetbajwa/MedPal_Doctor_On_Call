@@ -6,6 +6,9 @@ export interface IAppointment extends Document {
     email: string;
     firstName: string;
     lastName: string;
+    trackingId:string;
+    patientId:string;
+    doctorId:string;
   }
 
   

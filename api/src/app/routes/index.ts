@@ -30,10 +30,10 @@ const moduleRoutes = [
         path: '/patient',
         route: PatientRouter,
     },
-    // {
-    //     path: '/appointment',
-    //     route: AppointmentRouter,
-    // },
+    {
+        path: '/appointment',
+        route: AppointmentRouter,
+    },
     // {
     //     path: '/prescription',
     //     route: PrescriptionRouter,
