@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface IDoctorTimeSlott extends Document {
+export interface IDoctorTimeSlot extends Document {
     email: string;
     firstName: string;
     lastName: string;

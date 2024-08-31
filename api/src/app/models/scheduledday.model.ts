@@ -1,4 +1,9 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
+
+export interface IScheduleDay extends Document {
+    startTime: string;
+    endTime: string;
+}
 
 const ScheduleDaySchema = new Schema ({
     startTime: { type: String, required: false },

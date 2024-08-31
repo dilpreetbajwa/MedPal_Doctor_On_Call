@@ -8,6 +8,8 @@ import { IGenericResponse } from "../../../interfaces/common";
 import { Request } from "express";
 import { IUpload } from "../../../interfaces/file";
 import { CloudinaryHelper } from "../../../helpers/uploadHelper";
+import Doctor from "./doctor.model";
+import { IDoctor } from "./doctor.interface";
 
 const createBlog = async (req: Request): Promise<Blogs> => {
     const user = req.user as any;

@@ -1,8 +1,8 @@
 import httpStatus from "http-status";
 import ApiError from "../../../errors/apiError";
 import Doctor from "../doctor/doctor.model";
-import ScheduleDay from "../../models/scheduledday.model";
-import DoctorTimeSlot from "./doctorTimeSlot.model";
+import ScheduleDay ,{ IScheduleDay } from "../../models/scheduledday.model";
+import DoctorTimeSlot, { IDoctorTimeSlot } from "./doctorTimeSlot.model";
 import moment from "moment";
 
 const createTimeSlot = async (user: any, payload: any): Promise<any | null> => {
@@ -100,13 +100,20 @@ const getAllTimeSlot = async (): Promise<any[] | null> => {
         }
     })
     return result;
+
+//     const timeSlots: IDoctorTimeSlot[] = await DoctorTimeSlot.find({})
+//     .populate({
+//         path: 'timeSlot',
+//         model: 'ScheduleDay', // Populate the timeSlot field with ScheduleDay documents
+//         select: 'startTime endTime' // Select fields from ScheduleDay
+//     })
+//     .exec();
+// return timeSlots;
 }
 // const updateTimeSlot = async (user: any, id: string, payload: any): Promise<{ message: string }> => {
     // const { userId } = user;
     // const isDoctor = await Doctor.findOne({
-    //     where: {
     //         id: userId
-    //     }
     // })
     // if (!isDoctor) {
     //     throw new ApiError(httpStatus.NOT_FOUND, 'Doctor Account is not found !!')
@@ -115,9 +122,7 @@ const getAllTimeSlot = async (): Promise<any[] | null> => {
 
     // if (create && create.length > 0) {
     //     const doctorTimeSlot = await DoctorTimeSlot.findOne({
-    //         where: {
     //             day: create[0].day
-    //         }
     //     })
     //     if (!doctorTimeSlot) {
     //         throw new ApiError(httpStatus.NOT_FOUND, 'Time Slot is not found !!')
@@ -125,11 +130,9 @@ const getAllTimeSlot = async (): Promise<any[] | null> => {
     //     await Promise.all(create.map(async (item: ScheduleDay) => {
     //         try {
     //             await prisma.scheduleDay.create({
-    //                 data: {
     //                     startTime: item.startTime,
     //                     endTime: item.endTime,
     //                     doctorTimeSlotId: doctorTimeSlot?.id
-    //                 }
     //             })
     //         } catch (error) {
     //             throw new ApiError(httpStatus.EXPECTATION_FAILED, 'Failed to create')
@@ -157,54 +160,65 @@ const getAllTimeSlot = async (): Promise<any[] | null> => {
     //     message: 'Successfully Updated'
     // }
 // }
+const getAppointmentTimeOfEachDoctor = async ( doctorId: string, filter: any): Promise<any[]> => {
+    try {
+        // Fetch the doctor's time slots
+        const doctorTimeSlots = await DoctorTimeSlot.find({ doctorId })
+            .populate({
+                path: 'timeSlot',
+                model: 'ScheduleDay', // Populate the timeSlot field with ScheduleDay documents
+                select: 'startTime endTime' // Select fields from ScheduleDay
+            })
+            .exec();
 
-const getAppointmentTimeOfEachDoctor = async (id: string, filter: any): Promise<any> => {
-    // const doctorTimSlot = await prisma.doctorTimeSlot.findMany({
-    //     where: {
-    //         doctorId: id
-    //     },
-    //     include: {
-    //         timeSlot: true
-    //     },
-    // })
+        // Map and extract the necessary data
+        const allSlots = doctorTimeSlots.map((item) => {
+            const { day, timeSlot } = item;
+            return { day, timeSlot };
+        });
 
-    // const allSlots = doctorTimSlot.map((item) => {
-    //     const { day, timeSlot, ...others } = item;
-    //     return { day, timeSlot }
-    // })
+        // Function to generate time slots
+        const generateTimeSlot = (timeSlots: any[]): any[] => {
+            const selectedTime: any[] = [];
+            timeSlots.forEach((item) => {
+                const interval = 30; // Interval in minutes
+                const newTimeSlots: any[] = [];
+                const day: string = item?.day;
 
-    // const generateTimeSlot = (timeSlot: any) => {
-    //     const selectedTime: any[] = [];
-    //     timeSlot.forEach((item: any) => {
-    //         const interval = 30;
-    //         const newTimeSlots: any[] = [];
-    //         const day: string = item?.day;
+                item?.timeSlot.forEach((slot: IScheduleDay) => {
+                    const { startTime, endTime } = slot;
+                    const startDate = moment(startTime, 'hh:mm a');
+                    const endDate = moment(endTime, 'hh:mm a');
 
-    //         item?.timeSlot.map((slot: ScheduleDay) => {
+                    while (startDate < endDate) {
+                        const selectableTime = {
+                            id: newTimeSlots.length + 1,
+                            time: startDate.format('hh:mm a')
+                        };
+                        newTimeSlots.push({ day: day, slot: selectableTime });
+                        startDate.add(interval, 'minutes');
+                    }
+                });
 
-    //             const { startTime, endTime } = slot;
-    //             const startDate = moment(startTime, 'hh:mm a');
-    //             const endDate = moment(endTime, 'hh:mm a');
+                if (filter.day) {
+                    const newTime = newTimeSlots.filter((item) => item.day === filter.day);
+                    selectedTime.push(newTime);
+                } else {
+                    selectedTime.push(newTimeSlots);
+                }
+            });
+            return selectedTime.flat();
+        };
 
-    //             while (startDate < endDate) {
-    //                 const selectableTime = {
-    //                     id: newTimeSlots.length + 1,
-    //                     time: startDate.format('hh:mm a')
-    //                 }
-    //                 newTimeSlots.push({ day: day, slot: selectableTime });
-    //                 startDate.add(interval, 'minutes');
-    //             }
-    //         })
-    //         if (filter.day) {
-    //             const newTime = newTimeSlots.filter((item) => item.day === filter.day);
-    //             selectedTime.push(newTime);
-    //         }
-    //     })
-    //     return selectedTime.flat();
-    // }
-    // const result = generateTimeSlot(allSlots)
-    // return result
-}
+        // Generate and return the time slots
+        const result = generateTimeSlot(allSlots);
+        return result;
+    } catch (error) {
+        console.error('Error fetching appointment time slots for doctor:', error);
+        return [];
+    }
+};
+
 
 export const TimeSlotService = {
     // updateTimeSlot,
