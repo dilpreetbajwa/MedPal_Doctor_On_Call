@@ -12,9 +12,9 @@ api/logs/winston
 # production
 /build
 
-api/.env
 # misc
 .env
+api/.env
 .DS_Store
 .env.local
 .env.development
