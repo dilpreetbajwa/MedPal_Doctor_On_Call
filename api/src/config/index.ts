@@ -1,9 +1,10 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({path: path.join(process.cwd(), '.env')});
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
-const clientUrl = process.env.NODE_ENV==="development" ? process.env.CLIENT__LOCAL_URL : process.env.CLIENT_URL
+const clientUrl =
+    process.env.NODE_ENV === 'development' ? process.env.CLIENT__LOCAL_URL : process.env.CLIENT_URL;
 
 export default {
     env: process.env.NODE_ENV,
@@ -18,12 +19,14 @@ export default {
     cloudinary: {
         name: process.env.CLOUND_NAME,
         key: process.env.API_KEY,
-        secret: process.env.API_SECRET
+        secret: process.env.API_SECRET,
     },
     emailPass: process.env.EMAIL_PASS,
     adminEmail: process.env.ADMIN_EMAIL,
     gmail_app_Email: process.env.GMAIL_APP_EMAIL,
     defaultAdminDoctor: process.env.DEFULT_ADMIN_DOCTOR,
     backendLiveUrl: process.env.BACKEND_LIVE_URL,
-    backendLocalUrl: process.env.BACKEND_LOCAL_URL
-}
+    backendLocalUrl: process.env.BACKEND_LOCAL_URL,
+    mongoUrl: process.env.MONGO_URL,
+    mongoLocalUrl: process.env.MONGO_LOCAL_URL,
+};
