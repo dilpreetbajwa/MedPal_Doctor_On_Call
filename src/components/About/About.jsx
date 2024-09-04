@@ -37,7 +37,7 @@ const About = () => {
         </>
 
     let content = null;
-    if (!isLoading && isError) content = <div>{message.error('Something went Wrong!')}</div>
+    // if (!isLoading && isError) content = <div>{message.error('Something went Wrong!')}</div>
     if (!isLoading && !isError && blogData?.length === 0) content = <Empty />
     if (!isLoading && !isError && blogData?.length > 0) content =
         <>
