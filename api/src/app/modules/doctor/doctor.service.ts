@@ -28,8 +28,8 @@ const sendVerificationEmail = async (data: IDoctor) => {
             userId: data.id,
             expiresAt: expiresDate.toDate(),
             uniqueString: uniqueStringHashed
-        
     })
+
     if (verficationData) {
         const pathName = path.join(__dirname, '../../../../template/verify.html',)
         const obj = {link: url};
@@ -64,13 +64,11 @@ const create = async (payload: any): Promise<any> => {
                 userId: doctor.id
             
         });
-        return doctor
-
-      
-    // if (data.id) {
-    //     await sendVerificationEmail(data)
-    // }
-    // return data;
+        
+    if (doctor.id) {
+        await sendVerificationEmail(doctor)
+    }
+    return doctor;
 
 }
 
@@ -189,5 +187,6 @@ export const DoctorService = {
     updateDoctor,
     deleteDoctor,
     getAllDoctors,
+    sendVerificationEmail,
     getDoctor
 }
