@@ -4,7 +4,9 @@
 
 ## About The Project
 The `DoctorOnCall` System facilitates patients in scheduling appointments with preferred doctors or Emergency Appointments set up via an online platform.
-Developed using the React, Nodejs, and Prisma stack, it offers a professional website with dynamic functionalities. Key features include dynamic home, Email Notification, Filtering doctors, Setting up appointments and patients/doctors dashboards, secure user login with validation mechanisms, appointment scheduling with access to doctor details, patient appointment management, doctor selection, and overall industries level code splitting followed.
+- Developed using the React, Nodejs, and MongoDB, it offers a professional website with dynamic functionalities.
+- Key features include dynamic home, Email Notification, Filtering doctors, Setting up appointments and patients/doctors dashboards.
+- Secure user login with validation mechanisms, appointment scheduling with access to doctor details, patient appointment management, doctor selection, and overall industries level code splitting followed.
 
 ## What Features Will You Find Here:
  - **Dynamic Homepage:** Conveniently gathers essential information on a single page.
@@ -32,15 +34,10 @@ Before getting started with the DoctorOnCall System, ensure that you have the fo
   ```sh
   npm install npm@latest -g
   ```
-* Prisma CLI: If you're planning to work on the backend part, you'll need to have Prisma CLI installed globally. You can install it using npm:
-  ```sh
-   npm install -g prisma
-  ```
 * TypeScript (optional): TypeScript is used in the backend, ensure that you have TypeScript installed globally. You can install it using npm:
   ```sh
    npm install -g typescript
   ```
-
 ## Installation
 To begin using the DoctorOnCall System, follow these simple steps:
 ### The front-end and Backend code are in the same directory, with the Backend API located at the ./api directory
@@ -49,30 +46,62 @@ To begin using the DoctorOnCall System, follow these simple steps:
 # Setup Documentation
 
 ## Clone The Project
-git clone https://github.com/Ujjalzaman/Doctor-Appointment.git
+git clone https://github.com/dilpreetbajwa/MedPal_Doctor_On_Call.git
 
 ### Install Frontend
 cd Doctor-Appointment
 - npm install
 - npm start
 
-### Install Backend
-cd api
-- npm install
-
 ### Setup Database
-1. Rename .env.example to .env (remove .example).
-2. Create a PostgreSQL Database (Railway if you don't have one installed locally):
-   - Create an account at https://railway.app/.
-   - Navigate to the New Section > Database > Add PostgreSQL.
-   - Select your created database and go to the Variables tab.
-   - Copy DATABASE_PUBLIC_URL.
-   - Paste the database URL into the .env file.
+1. Create an Atlas Account
+Sign Up:
 
-### Install Prisma
-- npm install -g prisma
-- npx prisma generate
-- npx prisma migrate dev
+Go to the MongoDB Atlas website.
+Click on "Get Started Free" and sign up using your email or a social login.
+Verify Your Email:
+
+Follow the instructions sent to your email to verify your account.
+2. Create a Cluster
+Log In to Atlas:
+
+Once you’re logged in, you’ll be directed to the Atlas dashboard.
+Create a New Project:
+
+Click on “Projects” in the sidebar.
+Click “Create New Project”.
+Give your project a name and click “Create Project”.
+Build a Cluster:
+
+Inside your new project, click “Build a Cluster”.
+Choose a cloud provider (AWS, GCP, or Azure) and a region for your cluster.
+Select a cluster tier. The M0 tier is free and good for development purposes.
+Click “Create Cluster”. This process might take a few minutes.
+3. Configure Database Access
+Create a Database User:
+
+Go to the “Database Access” tab in the left sidebar.
+Click “Add New Database User”.
+Enter a username and password for the database user.
+Assign roles (e.g., “Atlas Admin” or specific roles like “readWrite”).
+Click “Add User”.
+Whitelist Your IP Address:
+
+Go to the “Network Access” tab.
+Click “Add IP Address”.
+You can either add your current IP address or use “0.0.0.0/0” to allow access from anywhere (note: the latter is less secure).
+Click “Confirm”.
+4. Connect to Your Cluster
+Get Connection String:
+
+Go to the “Clusters” tab.
+Click on “Connect” for the cluster you just created.
+Select “Connect Your Application”.
+Choose the connection method (e.g., “Node.js” or “Python”) and copy the connection string provided.
+Modify Connection String:
+
+Replace <username> and <password> in the connection string with the credentials of the database user you created.
+Optionally, specify the database name you want to connect to by appending /<database> to the connection string
 
 ### Setup Google App Password (For Email Notification)
 1. Go to Google Account settings at https://myaccount.google.com/security?hl=en.
@@ -86,6 +115,9 @@ cd api
 2. Login to your Cloudinary Account and copy all the credentials (e.g., Cloud name, API key, API secret).
 3. Paste those credentials into the .env file.
 
+### Install Backend
+cd api
+- npm install
 ### Start Backend
 npm run dev
 
@@ -109,32 +141,5 @@ Note: Please note that these are general instructions for setting up an Express 
 **Back-End:** 
 - **Express.js:** A web application framework for Node.js, used for building robust APIs and web applications
 - **TypeScript:** A superset of JavaScript that adds static typing, enhancing code quality and maintainability.
-- **Prisma**: A modern database toolkit for Node.js and TypeScript, used for database access and management.
 
- ## Project Screenshot
-![DoctorOnCall OverView](https://github.com/Ujjalzaman/Doctor-Appointment/assets/49386888/eeed56ce-3d9a-464d-91e5-588ea81ec5c0)
-
-## Contributing:
-
-1. Fork the repository by clicking the "Fork" button on the top right corner of the project's GitHub page. This will create a copy of the project in your own GitHub account.
-
-2. Clone the forked repository to your local machine by running the command ``` git clone https://github.com/your-username/online-doctor-appointment.git ``` in your terminal.
-
-3. Install the project's dependencies by running npm install or yarn install in the project's root directory.
-Create a new branch for your changes by running the command ``` git checkout -b branch-name ```, where branch-name is a descriptive name for your branch.
-Make your desired changes to the code.
-
-4. Test your changes locally by running npm start or yarn start and accessing the project in your web browser at ``` http://localhost:3000 ``` or another specified URL.
-5. Add and commit your changes to your local repository by running the command git add . followed by ``` git commit -m "Your commit message here" ```
-
-6. Push your changes to your forked repository by running the command ``` git push origin branch-name ```
-
-7. Create a pull request (PR) by navigating to your forked repository on GitHub and clicking the "New pull request" button. Make sure that the base branch is set to the original project's branch that you want to contribute to, and the head branch is set to your forked repository's branch that contains your changes.
-
-8. Write a descriptive title and message for your pull request, explaining the changes you made and why they should be merged.
-Wait for the project's maintainers to review your pull request and provide feedback. You may be asked to make further changes or address any issues before your changes are merged.
-
-9. Once your pull request is approved and merged, your changes will become part of the project. Congratulations, you have successfully contributed to the project!
-
-Thank you for considering this project. If you have any questions, please do not hesitate to contact me.
-
+ 
