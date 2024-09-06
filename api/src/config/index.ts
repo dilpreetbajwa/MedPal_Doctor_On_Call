@@ -6,7 +6,7 @@ dotenv.config({ path: path.join(process.cwd(), '.env') });
 const clientUrl =
     process.env.NODE_ENV === 'development' ? process.env.CLIENT__LOCAL_URL : process.env.CLIENT_URL;
 
-export default {
+const config = {
     env: process.env.NODE_ENV,
     port: process.env.PORT,
     default_doctor_pass: process.env.DOCTOR_PASS,
@@ -30,3 +30,5 @@ export default {
     mongoUrl: process.env.MONGO_URL,
     mongoLocalUrl: process.env.MONGO_LOCAL_URL,
 };
+
+export default config;
