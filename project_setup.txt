@@ -1,33 +1,67 @@
 # Setup Documentation
 
 ## Clone The Project
-git clone https://github.com/Ujjalzaman/Doctor-Appointment.git
+git clone https://github.com/dilpreetbajwa/MedPal_Doctor_On_Call.git
 
 ### Install Frontend
-cd Doctor-Appointment
+cd MedPal_Doctor_on_call
 - npm install
 - npm start
 
-### Install Backend
-cd api
-- npm install
+Add .env.development file and Add following Variables
+   REACT_APP_NODE_ENV=development
+   REACT_APP_API_BASE_URL= Write your local base url for backend apis ( example: http://localhost:5050/api/v1)
 
 ### Setup Database
-1. Rename .env.example to .env (remove .example).
+1. Create an Atlas Account
+Sign Up:
 
-2. Create a PostgreSQL Database (Railway if you don't have one installed locally):
-   - Create an account at https://railway.app/.
-   - Navigate to the New Section > Database > Add PostgreSQL.
-   - Select your created database and go to the Variables tab.
-   - Copy DATABASE_PUBLIC_URL.
-   - Paste the database URL into the .env file.
+Go to the MongoDB Atlas website.
+Click on "Get Started Free" and sign up using your email or a social login.
+Verify Your Email:
 
-2. CREATE MONGO_DB Database
-### Install Prisma
-- npm install -g prisma
-- npx prisma generate
-- npx prisma migrate dev
+Follow the instructions sent to your email to verify your account.
+2. Create a Cluster
+Log In to Atlas:
 
+Once you’re logged in, you’ll be directed to the Atlas dashboard.
+Create a New Project:
+
+Click on “Projects” in the sidebar.
+Click “Create New Project”.
+Give your project a name and click “Create Project”.
+Build a Cluster:
+
+Inside your new project, click “Build a Cluster”.
+Choose a cloud provider (AWS, GCP, or Azure) and a region for your cluster.
+Select a cluster tier. The M0 tier is free and good for development purposes.
+Click “Create Cluster”. This process might take a few minutes.
+3. Configure Database Access
+Create a Database User:
+
+Go to the “Database Access” tab in the left sidebar.
+Click “Add New Database User”.
+Enter a username and password for the database user.
+Assign roles (e.g., “Atlas Admin” or specific roles like “readWrite”).
+Click “Add User”.
+Whitelist Your IP Address:
+
+Go to the “Network Access” tab.
+Click “Add IP Address”.
+You can either add your current IP address or use “0.0.0.0/0” to allow access from anywhere (note: the latter is less secure).
+Click “Confirm”.
+4. Connect to Your Cluster
+Get Connection String:
+
+Go to the “Clusters” tab.
+Click on “Connect” for the cluster you just created.
+Select “Connect Your Application”.
+Choose the connection method (e.g., “Node.js” or “Python”) and copy the connection string provided.
+Modify Connection String:
+
+Replace <username> and <password> in the connection string with the credentials of the database user you created.
+Optionally, specify the database name you want to connect to by appending /<database> to the connection string
+ 
 ### Setup Google App Password (For Email Notification)
 1. Go to Google Account settings at https://myaccount.google.com/security?hl=en.
 2. Navigate to Security > 2-Step Verification.
@@ -40,7 +74,9 @@ cd api
 2. Login to your Cloudinary Account and copy all the credentials (e.g., Cloud name, API key, API secret).
 3. Paste those credentials into the .env file.
 
-### Start Backend
-npm start
+### Install Backend
+cd api
+- npm install
+- npm run dev
 
 Happy coding! 🚀
