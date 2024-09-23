@@ -78,11 +78,34 @@ const VerificationUser = async (user: any): Promise<ILginResponse> => {
     return { accessToken, user: { role, userId } }
 }
 
+
+const changePassword = async (payload: any): Promise<{ message: string }> => {
+    const { id, newPassword } = payload;
+
+    // Check if the user exists
+    const user = await AuthUser.findOne({ userId: id });
+    console.log(user);
+    
+    if (!user) {
+        return { message: 'User not found' };
+    }
+
+    // Update the user's password
+    try {
+        user.password = bcrypt.hashSync(newPassword, 12) ; // Ensure you hash the password before saving; // Ensure you hash the password before saving
+        await user.save();
+        
+        return { message: 'Password changed successfully' };
+    } catch (error) {
+        console.error(error);
+        return { message: 'Error changing password' };
+    }
+
+}
+
 const resetPassword = async (payload: any): Promise<{ message: string }> => {
     const { email } = payload;
-    const isUserExist = await AuthUser.findOne({
-        where: { email: email }
-    })
+    const isUserExist = await AuthUser.findOne({email: email})
     // if (!isUserExist) {
     //     throw new ApiError(httpStatus.NOT_FOUND, "User is not Exist !");
     // }
@@ -184,5 +207,6 @@ export const AuthService = {
     loginUser,
     VerificationUser,
     resetPassword,
-    PassworResetConfirm
+    PassworResetConfirm,
+    changePassword
 }
