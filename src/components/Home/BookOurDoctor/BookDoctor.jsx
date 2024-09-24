@@ -19,7 +19,7 @@ const BookDoctor = () => {
 	const { data, isError, isLoading } = useGetDoctorsQuery({ limit: 10 });
 	const doctors = data?.doctors;
 	const [addFavourite, { isSuccess, isLoading: FIsLoading, isError: fIsError, error }] = useAddFavouriteMutation();
-
+	
 	const handleAddFavourite = (id) => {
 		addFavourite({ doctorId: id });
 	};
@@ -83,8 +83,8 @@ const BookDoctor = () => {
 									</li>
 								</ul>
 								<div className="d-flex justify-content-between align-items-center">
-									<Link to={`/doctors/profile/${item?.id}`} className="btn  btn-outline-info btn-sm view-profile-btn">Profile</Link>
-									<Link to={`/booking/${item?.id}`} className="btn btn-sm book-btn">Book</Link>
+									<Link to={`/doctors/profile/${item?._id}`} className="btn  btn-outline-info btn-sm view-profile-btn">Profile</Link>
+									<Link to={`/booking/${item?._id}`} className="btn btn-sm book-btn">Book</Link>
 								</div>
 							</div>
 						</div >
