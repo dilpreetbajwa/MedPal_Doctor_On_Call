@@ -18,7 +18,9 @@ const SearchDoctor = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortByGender, setSorByGender] = useState('');
     const [specialist, setSpecialist] = useState('');
-    const [priceRange, setPriceRange] = useState({});
+
+    let priceRangeDefault = { min: 0, max: 100 };
+    const [priceRange, setPriceRange] = useState(priceRangeDefault);
 
     query['limit'] = size;
     query['page'] = page;
@@ -30,7 +32,6 @@ const SearchDoctor = () => {
 
     const priceDebounced = useDebounced({ searchQuery: priceRange, delay: 600 });
     const debounced = useDebounced({ searchQuery: searchTerm, delay: 600 });
-    // console.log('debounced: ', debounced);
 
     if (Object.keys(priceDebounced).length !== 0 && !!priceDebounced) {
         const { min, max } = priceDebounced;
@@ -46,7 +47,7 @@ const SearchDoctor = () => {
         setSortOrder('');
         setSorByGender('');
         setSpecialist('');
-        setPriceRange({});
+        setPriceRange(priceRangeDefault);
     };
 
     if (!!debounced) {
@@ -95,6 +96,7 @@ const SearchDoctor = () => {
                             setSpecialist={setSpecialist}
                             setPriceRange={setPriceRange}
                             resetFilter={resetFilter}
+                            priceRange={priceRange}
                             query={query}
                         />
                         <div className="col-md-12 col-lg-8 col-xl-9">

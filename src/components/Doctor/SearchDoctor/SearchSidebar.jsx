@@ -1,5 +1,5 @@
 import React from 'react';
-import { Slider, Button, DatePicker, Radio } from 'antd';
+import { Slider, Button, DatePicker, Radio, Input } from 'antd';
 import { FaSearch, FaRedoAlt } from 'react-icons/fa';
 import Search from 'antd/es/input/Search';
 import { doctorSpecialistOptions } from '../../../constant/global';
@@ -10,6 +10,7 @@ const SearchSidebar = ({
     setSpecialist,
     setPriceRange,
     resetFilter,
+    priceRange,
     query,
 }) => {
     const handleDateChange = (_date, _dateString) => {};
@@ -41,6 +42,7 @@ const SearchSidebar = ({
     const onSearch = (value) => {
         setSearchTerm(value);
     };
+
     return (
         <div className="col-md-12 col-lg-4 col-xl-3">
             <div className="p-3 rounded" style={{ background: '#f3f3f3' }}>
@@ -51,14 +53,14 @@ const SearchSidebar = ({
                     <Search placeholder="Search..." onSearch={onSearch} enterButton allowClear />
                 </div>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <h6 style={{ color: '#05335c' }}>Date Range</h6>
                     <DatePicker
                         style={{ width: '100%' }}
                         format="YYYY-MM-DD HH:mm:ss"
                         onChange={handleDateChange}
                     />
-                </div>
+                </div> */}
 
                 <div className="mb-3">
                     <h6 style={{ color: '#05335c' }}>Gender</h6>
@@ -69,7 +71,21 @@ const SearchSidebar = ({
 
                 <div className="mb-3">
                     <h6 style={{ color: '#05335c' }}>Price Range</h6>
-                    <Slider range defaultValue={[75, 150]} onChange={onRangeChange} />
+                    <div className="d-flex justify-content-between ">
+                        <Input className="w-25" disabled value={priceRange['min']} />
+                        <Input className="w-25" disabled value={priceRange['max']} />
+                    </div>
+                    <Slider
+                        range
+                        marks={{
+                            0: '$0',
+                            100: '$100',
+                        }}
+                        tooltip={{ formatter: null }}
+                        defaultValue={[0, 100]}
+                        onChange={onRangeChange}
+                        value={[priceRange['min'], priceRange['max']]}
+                    />
                 </div>
 
                 <div className="mb-3">
