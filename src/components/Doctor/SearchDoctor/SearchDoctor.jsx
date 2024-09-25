@@ -30,7 +30,6 @@ const SearchDoctor = () => {
 
     const priceDebounced = useDebounced({ searchQuery: priceRange, delay: 600 });
     const debounced = useDebounced({ searchQuery: searchTerm, delay: 600 });
-    // console.log('debounced: ', debounced);
 
     if (Object.keys(priceDebounced).length !== 0 && !!priceDebounced) {
         const { min, max } = priceDebounced;
@@ -52,24 +51,25 @@ const SearchDoctor = () => {
     if (!!debounced) {
         query.searchTerm = debounced;
     }
-    // console.log('Query: ', query);
 
     const { data, isLoading, isError } = useGetDoctorsQuery({ ...query });
 
     const doctorsData = data?.doctors;
     const meta = data?.meta;
 
+    console.log('data: ', doctorsData, meta);
+
     //what to render
     let content = null;
     if (isLoading) content = <>Loading ...</>;
     if (!isLoading && isError) content = <div>Something Went Wrong !</div>;
-    if (!isLoading && !isError && doctorsData.length === 0)
+    if (!isLoading && !isError && doctorsData?.length === 0)
         content = (
             <div>
                 <Empty />
             </div>
         );
-    if (!isLoading && !isError && doctorsData.length > 0)
+    if (!isLoading && !isError && doctorsData?.length > 0)
         content = (
             <>
                 {doctorsData &&
@@ -95,6 +95,10 @@ const SearchDoctor = () => {
                             setSpecialist={setSpecialist}
                             setPriceRange={setPriceRange}
                             resetFilter={resetFilter}
+                            priceRange={priceRange}
+                            sortByGender={sortByGender}
+                            specialist={specialist}
+                            searchTerm={searchTerm}
                             query={query}
                         />
                         <div className="col-md-12 col-lg-8 col-xl-9">
