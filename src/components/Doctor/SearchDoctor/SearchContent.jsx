@@ -10,13 +10,17 @@ import { truncate } from '../../../utils/truncate';
 
 const SearchContent = ({ data }) => {
     const services = data?.services?.split(',') ?? [];
-
+    const defaultUserUrl = process.env.REACT_APP_DEFAULT_USER_IMAGE;
     return (
         <div className="mb-4 rounded" style={{ background: '#f3f3f3' }}>
             <div className="d-flex p-3 justify-content-between">
                 <div className="d-flex gap-3">
                     <div className="doc-img-fluid d-flex align-items-center">
-                        {data?.img && <img src={data?.img} className="" alt="User Image" />}
+                        {data?.img ? (
+                            <img src={data?.img} className="" alt="User Image" />
+                        ) : (
+                            <img src={defaultUserUrl} alt="default user" />
+                        )}
                     </div>
                     <div className="doc-info d-flex flex-column">
                         <h5 className="mb-0">
