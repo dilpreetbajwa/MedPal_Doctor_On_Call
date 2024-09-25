@@ -51,7 +51,6 @@ const SearchDoctor = () => {
     if (!!debounced) {
         query.searchTerm = debounced;
     }
-    // console.log('Query: ', query);
 
     const { data, isLoading, isError } = useGetDoctorsQuery({ ...query });
 
@@ -95,6 +94,9 @@ const SearchDoctor = () => {
                             setPriceRange={setPriceRange}
                             resetFilter={resetFilter}
                             priceRange={priceRange}
+                            sortByGender={sortByGender}
+                            specialist={specialist}
+                            searchTerm={searchTerm}
                             query={query}
                         />
                         <div className="col-md-12 col-lg-8 col-xl-9">
