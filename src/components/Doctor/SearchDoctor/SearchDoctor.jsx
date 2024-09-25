@@ -57,17 +57,19 @@ const SearchDoctor = () => {
     const doctorsData = data?.doctors;
     const meta = data?.meta;
 
+    console.log('data: ', doctorsData, meta);
+
     //what to render
     let content = null;
     if (isLoading) content = <>Loading ...</>;
     if (!isLoading && isError) content = <div>Something Went Wrong !</div>;
-    if (!isLoading && !isError && doctorsData.length === 0)
+    if (!isLoading && !isError && doctorsData?.length === 0)
         content = (
             <div>
                 <Empty />
             </div>
         );
-    if (!isLoading && !isError && doctorsData.length > 0)
+    if (!isLoading && !isError && doctorsData?.length > 0)
         content = (
             <>
                 {doctorsData &&
