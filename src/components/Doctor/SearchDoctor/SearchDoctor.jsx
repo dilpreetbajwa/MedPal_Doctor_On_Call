@@ -18,9 +18,7 @@ const SearchDoctor = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortByGender, setSorByGender] = useState('');
     const [specialist, setSpecialist] = useState('');
-
-    let priceRangeDefault = { min: 0, max: 100 };
-    const [priceRange, setPriceRange] = useState(priceRangeDefault);
+    const [priceRange, setPriceRange] = useState({});
 
     query['limit'] = size;
     query['page'] = page;
@@ -47,7 +45,7 @@ const SearchDoctor = () => {
         setSortOrder('');
         setSorByGender('');
         setSpecialist('');
-        setPriceRange(priceRangeDefault);
+        setPriceRange({});
     };
 
     if (!!debounced) {

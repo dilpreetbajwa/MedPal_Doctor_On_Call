@@ -43,6 +43,7 @@ const SearchSidebar = ({
         setSearchTerm(value);
     };
 
+    // specialist, searchTerm, gender
     return (
         <div className="col-md-12 col-lg-4 col-xl-3">
             <div className="p-3 rounded" style={{ background: '#f3f3f3' }}>
@@ -72,8 +73,8 @@ const SearchSidebar = ({
                 <div className="mb-3">
                     <h6 style={{ color: '#05335c' }}>Price Range</h6>
                     <div className="d-flex justify-content-between ">
-                        <Input className="w-25" disabled value={priceRange['min']} />
-                        <Input className="w-25" disabled value={priceRange['max']} />
+                        <Input className="w-25" disabled value={priceRange?.['min'] || 0} />
+                        <Input className="w-25" disabled value={priceRange?.['max'] || 100} />
                     </div>
                     <Slider
                         range
@@ -84,7 +85,7 @@ const SearchSidebar = ({
                         tooltip={{ formatter: null }}
                         defaultValue={[0, 100]}
                         onChange={onRangeChange}
-                        value={[priceRange['min'], priceRange['max']]}
+                        value={[priceRange?.['min'] || 0, priceRange?.['max'] || 100]}
                     />
                 </div>
 
@@ -107,7 +108,7 @@ const SearchSidebar = ({
                 </Button>
                 {Object.keys(query).length > 4 && (
                     <Button
-                        className="w-100 mt-4 mb-2"
+                        className="w-100 mt-2 mb-2"
                         style={{ backgroundColor: '#1977cc' }}
                         onClick={resetFilter}
                         type="primary"
