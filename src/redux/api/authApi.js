@@ -15,9 +15,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           const result = (await queryFulfilled).data;
           setUserInfo({ accessToken: result.accessToken });
-        } catch (error) {
-          console.log("Failed to signup", error);
-        }
+        } catch (error) {}
       },
     }),
     patientSignUp: build.mutation({
@@ -48,6 +46,13 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
+    changePassword: build.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/change-password`,
+        method: "POST",
+        data,
+      }),
+    }),
   }),
 });
 
@@ -57,4 +62,5 @@ export const {
   usePatientSignUpMutation,
   useResetPasswordMutation,
   useResetConfirmMutation,
+  useChangePasswordMutation,
 } = authApi;
