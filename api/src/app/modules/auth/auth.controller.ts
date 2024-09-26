@@ -11,7 +11,6 @@ import moment from "moment";
 import Doctor from "../../models/doctor.model";
 
 const Login = catchAsync(async (req: Request, res: Response) => {
-  console.log("Running login");
   const result = await AuthService.loginUser(req.body);
   const { accessToken } = result;
 
