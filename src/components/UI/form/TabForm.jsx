@@ -11,7 +11,7 @@ const TabForm = ({
   showEditModal,
   showModal,
 }) => {
-  console.log("Data from tab form", data);
+  // console.log("Data from tab form", data);
   return (
     <Tabs defaultActiveKey="sunday" className="mb-3" onChange={handleOnSelect}>
       {daysArray.map((item) => (

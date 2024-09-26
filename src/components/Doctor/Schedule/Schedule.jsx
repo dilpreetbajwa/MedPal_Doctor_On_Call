@@ -16,6 +16,7 @@ const Schedule = () => {
   const [timeSlot, setTimeSlot] = useState([]);
   const [editTimeSlot, setEditTimeSlot] = useState([]);
   const [addTimeSlot, setAddTimeSlot] = useState([]);
+  const [currentId, setCurrentId] = useState(null);
   const [
     UpdateTimeSlot,
     {
@@ -28,6 +29,7 @@ const Schedule = () => {
   const { data, refetch, isLoading, isError } = useGetDoctorTimeSlotQuery({
     day: key,
   });
+
   const [
     createTimeSlot,
     { isError: AIsError, error, isLoading: AIsLoading, isSuccess },
@@ -35,31 +37,31 @@ const Schedule = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(!isModalOpen);
+
+  const handleOnSelect = (value) => {
+    setKey(value);
+    refetch();
   };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+
+  //  edit tikme slot helper functions
   const showEditModal = () => {
     setIsEditModalOpen(!isEditModalOpen);
+    setEditTimeSlot(timeSlot);
   };
 
   const handleEditOk = () => {
-    if (editTimeSlot.length > 0) {
-      const { toCreate, toUpdate } = editTimeSlot.reduce(
-        (acc, cur) => {
-          if (cur.doctorTimeSlotId) {
-            acc.toUpdate.push(cur);
-          } else {
-            acc.toCreate.push({ ...cur, day: key });
-          }
-          return acc;
-        },
-        { toCreate: [], toUpdate: [] }
-      );
-      UpdateTimeSlot({ timeSlot: toUpdate, create: toCreate });
-    }
+    const timeSlot = editTimeSlot?.map((item) => {
+      const { id, ...rest } = item;
+      return rest;
+    });
+
+    const data = {
+      id: currentId,
+      day: key,
+      timeSlot: timeSlot,
+    };
+    setEditTimeSlot([]);
+    UpdateTimeSlot({ data });
     setIsEditModalOpen(UIsLoading ? true : false);
   };
 
@@ -72,43 +74,30 @@ const Schedule = () => {
     }
   }, [uIsSuccess, uIsError, UIsLoading, uError?.data?.message]);
 
+  const handleEditCancel = () => {
+    setIsEditModalOpen(!isEditModalOpen);
+  };
+
   const handleEditStartTime = (id, time, timeString) => {
-    const findIndex = timeSlot.find((item) => item.id === id);
-    const updatedItem = { ...findIndex, startTime: timeString };
-    setEditTimeSlot((prev) => {
-      const indexToUpdate = prev.findIndex((item) => item.id === id);
-      if (indexToUpdate !== -1) {
-        const updatedArray = [...prev];
-        updatedArray[indexToUpdate] = updatedItem;
-        return updatedArray;
-      } else {
-        return [...prev, updatedItem];
-      }
-    });
+    setEditTimeSlot((prev) =>
+      prev.map((item) => {
+        return item._id === id ? { ...item, startTime: timeString } : item;
+      })
+    );
   };
 
   const handleEditEndTime = (id, time, timeString) => {
-    const findObject = timeSlot.find((item) => item.id === id);
-    if (findObject) {
-      const editedObject = editTimeSlot.find((item) => item.id === id);
-
-      const updateObject = editedObject.id
-        ? { ...editedObject, endTime: timeString }
-        : { ...findObject, endTime: timeString };
-      setEditTimeSlot((prev) => {
-        const findIndex = prev.findIndex((item) => item.id === id);
-        if (findIndex !== -1) {
-          const updateArray = [...prev];
-          updateArray[findIndex] = updateObject;
-          return updateArray;
-        } else {
-          return [...prev, updateObject];
-        }
-      });
-    }
+    setEditTimeSlot((prev) =>
+      prev.map((item) =>
+        item._id === id ? { ...item, endTime: timeString } : item
+      )
+    );
   };
-  const handleEditCancel = () => {
-    setIsEditModalOpen(!isEditModalOpen);
+
+  //  add new slot helper function
+
+  const showModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   const handleOk = () => {
@@ -132,8 +121,11 @@ const Schedule = () => {
     }
   }, [isSuccess, AIsError, error?.data?.message, AIsLoading, data]);
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const handleStartTime = (id, time, timeString) => {
-    console.log(timeString);
     setAddTimeSlot((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, startTime: timeString } : item
@@ -148,23 +140,21 @@ const Schedule = () => {
       )
     );
   };
-  const handleOnSelect = (value) => {
-    setKey(value);
-    refetch();
-  };
 
   useEffect(() => {
     if (data && data[0]?._id) {
       setTimeSlot(data[0].timeSlot);
+      setCurrentId(data[0]?._id);
     }
   }, [data]);
 
   const remove = (id) => {
-    setTimeSlot(timeSlot.filter((item) => item.id !== id));
+    setEditTimeSlot(editTimeSlot.filter((item) => item._id !== id));
   };
   const addField = (e) => {
-    const getLastValue = timeSlot[timeSlot.length - 1];
-    setTimeSlot([...timeSlot, { id: getLastValue.id + 1 }]);
+    const newId = timeSlot.length + 1;
+    setTimeSlot([...timeSlot, { _id: newId }]);
+    setEditTimeSlot([...editTimeSlot, { _id: newId }]);
     e.preventDefault();
   };
 
@@ -176,13 +166,6 @@ const Schedule = () => {
     setAddTimeSlot([...addTimeSlot, { id: newId }]);
     e.preventDefault();
   };
-
-  console.log(
-    "timeslot from schedule.jsx",
-    timeSlot.map((item, index) => {
-      return { ...item, id: index };
-    })
-  );
 
   let content = null;
   if (!isLoading && isError) content = <div>Something Went Wrong !</div>;
@@ -233,22 +216,22 @@ const Schedule = () => {
         </div>
       </DashboardLayout>
 
-      {/* Edit time slot modeal */}
+      {/* Edit time slot modal */}
       <UseModal
         title="Edit Time Slots"
         isModaOpen={isEditModalOpen}
         handleOk={handleEditOk}
         handleCancel={handleEditCancel}
-        timeSlot={timeSlot}
+        // timeSlot={timeSlot}
       >
         <form>
           <div className="hours-info">
             <div className="row form-row hours-cont">
-              {timeSlot &&
-                timeSlot?.map((item, index) => (
+              {editTimeSlot &&
+                editTimeSlot?.map((item, index) => (
                   <div
                     className="col-12 col-md-10 d-flex align-items-center justify-content-between"
-                    key={index + item.id}
+                    key={index + item._id}
                   >
                     <div className="row form-row">
                       <div className="col-12 col-md-6">
@@ -257,7 +240,7 @@ const Schedule = () => {
                           <TimePicer
                             handleFunction={handleEditStartTime}
                             time={item.startTime}
-                            id={item.id}
+                            id={item._id}
                           />
                         </div>
                       </div>
@@ -267,7 +250,7 @@ const Schedule = () => {
                           <TimePicer
                             handleFunction={handleEditEndTime}
                             time={item.endTime}
-                            id={item.id}
+                            id={item._id}
                           />
                         </div>
                       </div>
@@ -276,7 +259,7 @@ const Schedule = () => {
                       type="primary"
                       size="small"
                       htmlType="submit"
-                      onClick={() => remove(item?.id)}
+                      onClick={() => remove(item?._id)}
                       block
                       icon={<FaWindowClose />}
                     ></Button>
@@ -300,6 +283,7 @@ const Schedule = () => {
         </form>
       </UseModal>
 
+      {/* Add time slot */}
       <UseModal
         title="Add Time Slots"
         isModaOpen={isModalOpen}
