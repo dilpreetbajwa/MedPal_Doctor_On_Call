@@ -5,31 +5,46 @@ import StarRatings from 'react-star-ratings';
 import { Tag } from 'antd';
 import './index.css';
 import { FaLocationArrow, FaRegThumbsUp, FaDollarSign, FaComment } from 'react-icons/fa';
+import { ImLocation } from 'react-icons/im';
 import { truncate } from '../../../utils/truncate';
 
 const SearchContent = ({ data }) => {
-    const services = data?.services?.split(',');
-    // console.log(services);
+    const services = data?.services?.split(',') ?? [];
+    const defaultUserUrl = process.env.REACT_APP_DEFAULT_USER_IMAGE;
     return (
         <div className="mb-4 rounded" style={{ background: '#f3f3f3' }}>
             <div className="d-flex p-3 justify-content-between">
                 <div className="d-flex gap-3">
                     <div className="doc-img-fluid d-flex align-items-center">
-                        {data?.img && <img src={data?.img} className="" alt="User Image" />}
+                        {data?.img ? (
+                            <img src={data?.img} className="" alt="User Image" />
+                        ) : (
+                            <img src={defaultUserUrl} alt="default user" />
+                        )}
                     </div>
-                    <div className="doc-info">
+                    <div className="doc-info d-flex flex-column">
                         <h5 className="mb-0">
                             <Link to={`/doctors/profile/${data?._id}`}>
                                 Dr. {data?.firstName + ' ' + data?.lastName}
                             </Link>
                         </h5>
-                        <p className="m-0 form-text">{data?.designation}</p>
-                        <p className="doc-department m-0">
-                            <img src={showImg} className="img-fluid" alt="Speciality" />
-                            Urology
-                        </p>
 
-                        <div className="d-flex align-items-center">
+                        {data?.designation ? (
+                            <p className="mb-3 form-text">{data.designation}</p>
+                        ) : (
+                            <div className="mb-3 form-text">Doctor</div>
+                        )}
+
+                        <div className="mt-auto">
+                            {data?.specialization && (
+                                <div className="doc-department">
+                                    <img src={showImg} className="img-fluid" alt="Speciality" />
+                                    {data.specialization}
+                                </div>
+                            )}
+
+                            {/* Commented since its Static */}
+                            {/* <div className="d-flex align-items-center">
                             <div>
                                 <StarRatings
                                     rating={5}
@@ -39,15 +54,16 @@ const SearchContent = ({ data }) => {
                                     starDimension="15px"
                                     starSpacing="2px"
                                 />
-                            </div>
-                            <div>(4)</div>
-                        </div>
+                                </div>
+                                <div>(4)</div>
+                            </div> */}
 
-                        <div className="clinic-details">
-                            <p className="form-text text-secondary">
-                                <FaLocationArrow /> {data?.address}, {data?.country}
-                            </p>
-                            <ul className="clinic-gallery mt-3">
+                            <div className="clinic-details">
+                                <div className="text-secondary my-1 d-flex align-items-center">
+                                    <ImLocation />
+                                    {data?.clinicAddress}
+                                </div>
+                                {/* <ul className="clinic-gallery mt-3">
                                 <li>
                                     <img src={showImg} alt="Feature" style={{ maxWidth: '30px' }} />
                                 </li>
@@ -60,29 +76,35 @@ const SearchContent = ({ data }) => {
                                 <li>
                                     <img src={showImg} alt="Feature" style={{ maxWidth: '30px' }} />
                                 </li>
-                            </ul>
+                            </ul> */}
+                            </div>
+                            {services.map((item, id) => (
+                                <Tag key={id}>{item}</Tag>
+                            ))}
                         </div>
-                        {services?.map((item, id) => (
-                            <Tag key={id + 51}>{item}</Tag>
-                        ))}
                     </div>
                 </div>
-                <div className="doc-info-right me-3">
+                <div className="d-flex flex-column me-3">
                     <div className="clini-infos">
                         <ul>
+                            {/* 
+                            Commented since its static
+                            
                             <li>
                                 <FaRegThumbsUp /> 97%
                             </li>
                             <li>
                                 <FaComment /> 4 Feedback
-                            </li>
-                            {/* <li><FaLocationArrow />{truncate(data?.clinicAddress, 20)}</li> */}
-                            <li>
-                                <FaDollarSign /> {data?.price ? truncate(data?.price, 4) : 60} (Per Hour)
-                            </li>
+                            </li> 
+                            */}
+                            {data?.price && (
+                                <li className="text-secondary d-flex align-items-center">
+                                    <FaDollarSign /> {truncate(data.price, 4)}/Hr
+                                </li>
+                            )}
                         </ul>
                     </div>
-                    <div className="clinic-booking">
+                    <div className="clinic-booking mt-auto">
                         <Link to={`/doctors/profile/${data?._id}`} className="view-pro-btn">
                             View Profile
                         </Link>
