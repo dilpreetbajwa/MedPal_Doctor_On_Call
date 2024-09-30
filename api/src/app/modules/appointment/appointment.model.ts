@@ -16,7 +16,35 @@ const appointmentSchema = new Schema ({
         img: { type: String, required: false },
         trackingId:{ type: String, required: false },
         patientId:{ type: String, ref: "Patient" },
-        doctorId:{ type: String, ref: "Doctor" }
+        doctorId:{ type: String, ref: "Doctor" },
+        scheduleDate:{ type: String, required: false },
+        scheduleTime:{ type: String, required: false },
+        reasonForVisit:{ type: String, required: false },
+        status: {
+            type: String,
+            enum: ['pending', 'completed'], // Enum values
+            default: 'pending', // Default value
+            required: true
+          },
+          paymentStatus: {
+            type: String,
+            enum: ['paid', 'unpaid'], // Enum values
+            default: 'unpaid', // Default value
+            required: true
+          },
+          prescriptionStatus: {
+            type: String,
+            enum: ['Issued', 'notIssued'], // Enum values
+            default: 'notIssued', // Default value
+            required: true
+          },
+          isFollowUp: {
+            type: Boolean,
+            enum: ['true', 'false'], // Enum values
+            default: 'false', // Default value
+            required: true
+          },
+          patientType:{ type: String, required: false },
     },
     { timestamps: true }
 );

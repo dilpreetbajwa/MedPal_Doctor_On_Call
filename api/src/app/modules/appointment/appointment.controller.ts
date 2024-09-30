@@ -108,13 +108,13 @@ const updateAppointmentByDoctor = catchAsync(async (req: Request, res: Response)
 })
 
 const getDoctorPatients = catchAsync(async (req: Request, res: Response) => {
-    // const result = await AppointmentService.getDoctorPatients(req.user);
-    // sendResponse(res, {
-    //     statusCode: 200,
-    //     message: 'Successfully retrieve doctor patients !!',
-    //     success: true,
-    //     data: result
-    // })
+    const result = await AppointmentService.getDoctorPatients(req.user);
+    sendResponse(res, {
+        statusCode: 200,
+        message: 'Successfully retrieve doctor patients !!',
+        success: true,
+        data: result
+    })
 })
 
 const getPaymentInfoViaAppintmentId = catchAsync(async (req: Request, res: Response) => {

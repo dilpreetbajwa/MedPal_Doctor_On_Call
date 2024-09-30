@@ -495,66 +495,57 @@ const getDoctorAppointmentsById = async (user: any, filter: any): Promise<any | 
         throw new ApiError(httpStatus.NOT_FOUND, 'Doctor Account is not found !!');
     }
     
-    let andCondition = { doctorId: userId };
+    let andCondition: { [key: string]: any } = { doctorId: userId };
+
+    if (filter.sortBy === 'today') {
+        const today = moment().startOf('day').toDate();
+        const tomorrow = moment(today).add(1, 'days').toDate();
     
-    // if (filter.sortBy === 'today') {
-    //     const today = moment().startOf('day').toDate();
-    //     const tomorrow = moment(today).add(1, 'days').toDate();
+        andCondition.scheduleDate = {
+            $gte: today,
+            $lt: tomorrow,
+        };
+    }
     
-    //     andCondition.scheduleDate = {
-    //         $gte: today,
-    //         $lt: tomorrow,
-    //     };
-    // }
+    if (filter.sortBy === 'upcoming') {
+        const upcomingDate = moment().startOf('day').add(1, 'days').toDate();
+        andCondition.scheduleDate = {
+            $gte: upcomingDate,
+        };
+    }
     
-    // if (filter.sortBy === 'upcoming') {
-    //     const upcomingDate = moment().startOf('day').add(1, 'days').toDate();
-    //     andCondition.scheduleDate = {
-    //         $gte: upcomingDate,
-    //     };
-    // }
+    const whereConditions: { [key: string]: any } = andCondition;
     
-    const whereConditions = andCondition;
-    
-    const result = await Appointment.find({doctorId: userId})
-        .populate({
-            path: 'patient',
-            model: 'Patient', // replace with your actual Patient model name
-        });
+    const result = await Appointment.find(andCondition)
+    .populate('patientId');
+    // .populate({
+    //     path: 'prescription',
+    //     select: { id: true }
+    // });
         console.log(result);
         return result;
 }
 
-// const getDoctorPatients = async (user: any): Promise<Patient[]> => {
-//     // const { userId } = user;
-//     // const isDoctor = await prisma.doctor.findUnique({
-//     //     where: {
-//     //         id: userId
-//     //     }
-//     // })
-//     // if (!isDoctor) {
-//     //     throw new ApiError(httpStatus.NOT_FOUND, 'Doctor Account is not found !!')
-//     // }
+const getDoctorPatients = async (user: any): Promise<any[]> => {
+    const { userId } = user;
+    
+    // Check if the user is a doctor
+    const isDoctor = await Doctor.findById(userId);
+    
+    if (!isDoctor) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Doctor Account is not found !!');
+    }
 
-//     // const patients = await prisma.appointments.findMany({
-//     //     where: {
-//     //         doctorId: userId
-//     //     },
-//     //     distinct: ['patientId']
-//     // });
+    // Find appointments for the doctor and extract distinct patient IDs
+    const appointments = await Appointment.find({ doctorId: userId });
+    
+    // Extract patient IDs from the appointments
+    const patientIds = appointments.map(appointment => appointment.patientId);
 
-//     // //extract patients from the appointments table
-//     // const patientIds = patients.map(appointment => appointment.patientId);
-//     // const patientList = await prisma.patient.findMany({
-//     //     where: {
-//     //         id: {
-//     //             // @ts-ignore
-//     //             in: patientIds
-//     //         }
-//     //     }
-//     // })
-//     // return patientList;
-// }
+    // Find distinct patients based on the extracted IDs
+    const patientList = await Patient.find({ _id: { $in: patientIds } });
+    return patientList;
+}
 
 // const updateAppointmentByDoctor = async (user: any, payload: Partial<Appointments>): Promise<any | null> => {
 //     // const { userId } = user;
@@ -584,7 +575,7 @@ export const AppointmentService = {
     getPatientAppointmentById,
     getDoctorAppointmentsById,
     // updateAppointmentByDoctor,
-    // getDoctorPatients,
+    getDoctorPatients,
     // getPaymentInfoViaAppintmentId,
     // getPatientPaymentInfo,
     // getDoctorInvoices,
