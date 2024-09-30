@@ -287,10 +287,10 @@ const createAppointment = async (payload: any): Promise<any | null> => {
 //     // return result;
 // }
 
-// const getAllAppointments = async (): Promise<Appointments[] | null> => {
-//     // const result = await prisma.appointments.findMany();
-//     // return result;
-// }
+const getAllAppointments = async (): Promise<any[] | null> => {
+    const result = await Appointment.find();
+    return result;
+}
 
 // const getAppointment = async (id: string): Promise<Appointments | null> => {
 //     // const result = await prisma.appointments.findUnique({
@@ -483,48 +483,47 @@ const getPatientAppointmentById = async (user: { userId: string }): Promise<any[
 //     // return result;
 // }
 
-// //doctor Side
-// const getDoctorAppointmentsById = async (user: any, filter: any): Promise<Appointments[] | null> => {
-//     // const { userId } = user;
-//     // const isDoctor = await prisma.doctor.findUnique({
-//     //     where: {
-//     //         id: userId
-//     //     }
-//     // })
-//     // if (!isDoctor) { throw new ApiError(httpStatus.NOT_FOUND, 'Doctor Account is not found !!') }
+//doctor Side
+const getDoctorAppointmentsById = async (user: any, filter: any): Promise<any | null> => {
+   
 
-//     // let andCondition: any = { doctorId: userId };
-
-//     // if (filter.sortBy == 'today') {
-//     //     const today = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
-//     //     const tomorrow = moment(today).add(1, 'days').format('YYYY-MM-DD HH:mm:ss');
-
-//     //     andCondition.scheduleDate = {
-//     //         gte: today,
-//     //         lt: tomorrow
-//     //     }
-//     // }
-//     // if (filter.sortBy == 'upcoming') {
-//     //     const upcomingDate = moment().startOf('day').add(1, 'days').format('YYYY-MM-DD HH:mm:ss')
-//     //     andCondition.scheduleDate = {
-//     //         gte: upcomingDate
-//     //     }
-//     // }
-//     // const whereConditions = andCondition ? andCondition : {}
-
-//     // const result = await prisma.appointments.findMany({
-//     //     where: whereConditions,
-//     //     include: {
-//     //         patient: true,
-//     //         prescription: {
-//     //             select: {
-//     //                 id: true
-//     //             }
-//     //         }
-//     //     }
-//     // });
-//     // return result;
-// }
+    const { userId } = user;
+    const isDoctor = await Doctor.findById(userId);
+    console.log(isDoctor);
+    console.log(userId);
+    if (!isDoctor) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Doctor Account is not found !!');
+    }
+    
+    let andCondition = { doctorId: userId };
+    
+    // if (filter.sortBy === 'today') {
+    //     const today = moment().startOf('day').toDate();
+    //     const tomorrow = moment(today).add(1, 'days').toDate();
+    
+    //     andCondition.scheduleDate = {
+    //         $gte: today,
+    //         $lt: tomorrow,
+    //     };
+    // }
+    
+    // if (filter.sortBy === 'upcoming') {
+    //     const upcomingDate = moment().startOf('day').add(1, 'days').toDate();
+    //     andCondition.scheduleDate = {
+    //         $gte: upcomingDate,
+    //     };
+    // }
+    
+    const whereConditions = andCondition;
+    
+    const result = await Appointment.find({doctorId: userId})
+        .populate({
+            path: 'patient',
+            model: 'Patient', // replace with your actual Patient model name
+        });
+        console.log(result);
+        return result;
+}
 
 // const getDoctorPatients = async (user: any): Promise<Patient[]> => {
 //     // const { userId } = user;
@@ -578,12 +577,12 @@ const getPatientAppointmentById = async (user: { userId: string }): Promise<any[
 
 export const AppointmentService = {
     createAppointment,
-    // getAllAppointments,
+    getAllAppointments,
     // getAppointment,
     // deleteAppointment,
     // updateAppointment,
     getPatientAppointmentById,
-    // getDoctorAppointmentsById,
+    getDoctorAppointmentsById,
     // updateAppointmentByDoctor,
     // getDoctorPatients,
     // getPaymentInfoViaAppintmentId,

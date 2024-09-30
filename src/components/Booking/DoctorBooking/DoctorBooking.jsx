@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Footer from '../../Shared/Footer/Footer'
-import img from '../../../images/doc/doctor 3.jpg'
+import img from '../../../images/no_doctor_image.jpg'
 import './index.css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Empty, Button, message, Steps } from 'antd';
@@ -44,10 +44,10 @@ const DoctorBooking = () => {
     const [patientId, setPatientId] = useState('');
     const [createAppointment, { data: appointmentData, isSuccess: createIsSuccess, isError: createIsError, error: createError, isLoading: createIsLoading }] = useCreateAppointmentMutation();
     const { doctorId } = useParams();
+   
     const navigation = useNavigate();
     const { data, isLoading, isError, error } = useGetDoctorQuery(doctorId);
     const { data: time, refetch, isLoading: dIsLoading, isError: dIsError, error: dError } = useGetAppointmentTimeQuery({ day: selectDay, id: doctorId });
-
     const [selectValue, setSelectValue] = useState(initialValue);
     const [IsdDisable, setIsDisable] = useState(true);
     const [IsConfirmDisable, setIsConfirmDisable] = useState(true);
@@ -55,6 +55,7 @@ const DoctorBooking = () => {
     const handleChange = (e) => { setSelectValue({ ...selectValue, [e.target.name]: e.target.value }) }
 
     useEffect(() => {
+       
         const { firstName, lastName, email, phone, nameOnCard, cardNumber, expiredMonth, cardExpiredYear, cvv, reasonForVisit } = selectValue;
         const isInputEmpty = !firstName || !lastName || !email || !phone || !reasonForVisit;
         const isConfirmInputEmpty = !nameOnCard || !cardNumber || !expiredMonth || !cardExpiredYear || !cvv || !isCheck;
@@ -92,15 +93,15 @@ const DoctorBooking = () => {
     //What to render
     let content = null;
     if (!isLoading && isError) content = <div>Something Went Wrong!</div>
-    if (!isLoading && !isError && data?.id === undefined) content = <Empty />
-    if (!isLoading && !isError && data?.id) content =
+    if (!isLoading && !isError && data?._id === undefined) content = <Empty />
+    if (!isLoading && !isError && data?._id) content =
         <>
             <div className="booking-doc-img my-3 mb-3 rounded">
-                <Link to={`/doctors/${data?.id}`}>
+                <Link to={`/doctors/${data?._id}`}>
                     <img src={img} alt="" />
                 </Link>
                 <div className='text-start'>
-                    <Link to={`/doctors/${data?.id}`} style={{ textDecoration: 'none' }}>Dr. {data?.firstName + ' ' + data?.lastName}</Link>
+                    <Link to={`/doctors/${data?._id}`} style={{ textDecoration: 'none' }}>Dr. {data?.firstName + ' ' + data?.lastName}</Link>
                     <p className="form-text mb-0"><FaArchway /> {data?.specialization + ',' + data?.experienceHospitalName}</p>
                 </div>
             </div>

@@ -28,13 +28,13 @@ const createAppointmentByUnAuthenticateUser = catchAsync(async (req: Request, re
 
 
 const getAllAppointment = catchAsync(async (req: Request, res: Response) => {
-    // const result = await AppointmentService.getAllAppointments();
-    // sendResponse(res, {
-    //     statusCode: 200,
-    //     message: 'Successfully Retrieve All Appointment !!',
-    //     success: true,
-    //     data: result,
-    // })
+    const result = await AppointmentService.getAllAppointments();
+    sendResponse(res, {
+        statusCode: 200,
+        message: 'Successfully Retrieve All Appointment !!',
+        success: true,
+        data: result,
+    })
 })
 
 const getAppointment = catchAsync(async (req: Request, res: Response) => {
@@ -88,13 +88,13 @@ const getPatientAppointmentById = catchAsync(async (req: Request, res: Response)
 })
 
 const getDoctorAppointmentsById = catchAsync(async (req: Request, res: Response) => {
-    // const result = await AppointmentService.getDoctorAppointmentsById(req.user, req.query);
-    // sendResponse(res, {
-    //     statusCode: 200,
-    //     message: 'Successfully Retrieve doctor apppointments !!',
-    //     success: true,
-    //     data: result
-    // })
+    const result = await AppointmentService.getDoctorAppointmentsById(req.user, req.query);
+    sendResponse(res, {
+        statusCode: 200,
+        message: 'Successfully Retrieve doctor apppointments !!',
+        success: true,
+        data: result
+    })
 })
 
 const updateAppointmentByDoctor = catchAsync(async (req: Request, res: Response) => {

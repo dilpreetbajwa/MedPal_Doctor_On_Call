@@ -8,6 +8,7 @@ import StarRatings from 'react-star-ratings';
 import { message } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
+import no_doctor_image from '../../../images/no_doctor_image.jpg';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -45,7 +46,12 @@ const BookDoctor = () => {
 						<div className="profile-widget">
 							<div className="doc-img">
 								<Link to={`/doctors/profile/${item?.id}`}>
-									{item?.img && <img className="img-fluid" alt="" src={item?.img} />}
+								{item?.img ? (
+									<img className="img-fluid" alt="" src={item.img} />
+								) : (
+									<img className="img-fluid" alt="" src={no_doctor_image} /> // or any fallback UI
+								)}
+									{/* {item?.img && <img className="img-fluid" alt="" src={item?.img} />} */}
 								</Link>
 								<a style={{ cursor: 'pointer' }} className="position-absolute top-0 end-0 me-2" onClick={() => handleAddFavourite(item?.id)}>
 									<FaRegHeart />
