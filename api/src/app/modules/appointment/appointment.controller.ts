@@ -38,13 +38,13 @@ const getAllAppointment = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getAppointment = catchAsync(async (req: Request, res: Response) => {
-    // const result = await AppointmentService.getAppointment(req.params.id);
-    // sendResponse(res, {
-    //     statusCode: 200,
-    //     message: 'Successfully Get Appointment !!',
-    //     success: true,
-    //     data: result,
-    // })
+    const result = await AppointmentService.getAppointment(req.params.id);
+    sendResponse(res, {
+        statusCode: 200,
+        message: 'Successfully Get Appointment !!',
+        success: true,
+        data: result,
+    })
 })
 
 const getAppointmentByTrackingId = catchAsync(async (req: Request, res: Response) => {
@@ -118,13 +118,13 @@ const getDoctorPatients = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getPaymentInfoViaAppintmentId = catchAsync(async (req: Request, res: Response) => {
-    // const result = await AppointmentService.getPaymentInfoViaAppintmentId(req.params.id);
-    // sendResponse(res, {
-    //     statusCode: 200,
-    //     message: 'Successfully retrieve payment info !!',
-    //     success: true,
-    //     data: result
-    // })
+    const result = await AppointmentService.getPaymentInfoViaAppintmentId(req.params.id);
+    sendResponse(res, {
+        statusCode: 200,
+        message: 'Successfully retrieve payment info !!',
+        success: true,
+        data: result
+    })
 })
 
 const getPatientPaymentInfo = catchAsync(async (req: Request, res: Response) => {

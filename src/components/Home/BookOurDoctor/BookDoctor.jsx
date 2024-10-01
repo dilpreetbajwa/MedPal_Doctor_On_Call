@@ -105,11 +105,12 @@ const BookDoctor = () => {
 					<div className="col-12 col-md-3 col-lg-3">
 						<div className='mb-2 section-title text-center'>
 							<h2>Book Our Doctor</h2>
-							<p className='m-0 text-secondary'>Lorem ipsum dolor sit.</p>
+							<p className='m-1 text-secondary'>Your Health, Our Priority</p>
 						</div>
 						<div className="form-text">
-							<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.</p>
-							<p>Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover  Various versions have evolved over the years, sometimes</p>
+							<p>we leverage advanced health AI technology to enhance your medical experience. Our platform seamlessly connects you with top medical professionals who are dedicated to providing personalized care tailored to your unique health needs. Whether youre looking for a routine check-up or specialized treatment, booking an appointment with our doctors has never been easier.</p>
+							<p className='font-semibold'>Meet our team of experienced doctors here to provide you with the best medical care. Booking an appointment is quick and easy!
+</p>
 							<div className='text-center text-md-start my-3 my-md-0'>
 								<Link to={'/doctors'} className='more-btn text-center text-md-start'>See More</Link>
 							</div>
