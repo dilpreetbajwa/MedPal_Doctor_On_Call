@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import DashboardLayout from '../DashboardLayout/DashboardLayout';
 import img from '../../../images/avatar.jpg';
+import dummy_pic from '../../../images/dummy_pic2.jpg';
 
 import './Appointments.css';
 import { useGetDoctorAppointmentsQuery, useUpdateAppointmentMutation } from '../../../redux/api/appointmentApi';
@@ -34,7 +35,7 @@ const Appointments = () => {
     }, [isSuccess, updateIsError, error])
 
     const getInitPatientName = () => {
-        const fullName = `${data?.patient?.firstName ?? ''} ${data?.patient?.lastName ?? ''}`;
+        const fullName = `${data?.patientId?.firstName ?? ''} ${data?.patientId?.lastName ?? ''}`;
         return fullName.trim() || "Private Patient";
     }
 
@@ -49,50 +50,50 @@ const Appointments = () => {
                         <div className="d-flex justify-content-between align-items-center">
                             <div className="d-flex align-items-center gap-3">
                                 <Link to={`/`} className="patient-img">
-                                    <img src={data?.patient?.img ? data?.patient?.img : img} alt="" />
+                                    <img src={data?.patientId?.img ? data?.patientId?.img : dummy_pic} alt="" />
                                 </Link>
                                 <div className="patients-info">
-                                    <h5>{getInitPatientName()}</h5>
-                                    <Tooltip title="Copy Tracking Id">
+                                    <h5>{item?.patientId?.firstName ?? " "}{" "} {item?.patientId?.lastName?? " "}</h5>
+                                    {/* <Tooltip title="Copy Tracking Id">
                                         <Button>
                                             <h6>Tracking<Tag color="#87d068" className='ms-2 text-uppercase' onClick={() => clickToCopyClipBoard(item?.trackingId)}>{item?.trackingId}</Tag></h6>
                                         </Button>
-                                    </Tooltip>
+                                    </Tooltip> */}
 
-                                    <div className="info mt-2">
+                                    <div className="info mt-1">
                                         <p><FaClock className='icon' /> {moment(item?.appointmentTime).format("MMM Do YY")} </p>
-                                        {item?.patient?.address && <p><FaLocationArrow className='icon' /> {item?.patient?.address}</p>}
-                                        {item?.patient?.email && <p><FaEnvelope className='icon' /> {item?.patient?.email}</p>}
-                                        {item?.patient?.address && <p><FaPhoneAlt className='icon' />{item?.patient?.address}</p>}
+                                        {item?.patientId?.address && <p><FaLocationArrow className='icon' /> {item?.patientId?.address}</p>}
+                                        {item?.patientId?.email && <p><FaEnvelope className='icon' /> {item?.patientId?.email}</p>}
+                                        {item?.patientId?.address && <p><FaPhoneAlt className='icon' />{item?.patientId?.address}</p>}
 
                                     </div>
                                 </div>
                                 <div className='appointment-status card p-3 border-primary'>
-                                    <p>Current Status - <span><Tag color="#f50" className='text-uppercase'>{item?.status}</Tag></span></p>
-                                    <p>Patient Status - <span><Tag color="#2db7f5" className='text-uppercase'>{item?.patientType}</Tag></span></p>
-                                    <p>Is Follow Up - <span><Tag color="#f50" className='text-uppercase'>{item?.isFollowUp ? "Yes" : "No"}</Tag></span></p>
-                                    <p> Is Paid - <span><Tag color="#87d068" className='text-uppercase'>{item?.paymentStatus}</Tag></span></p>
-                                    <p> Prescribed - <span><Tag color="#2db7f5" className='text-uppercase'>{item?.prescriptionStatus}</Tag></span></p>
+                                    <p>Current Status - <span><Tag color="#f50" className='text-uppercase text-xs font-medium me-2 px-2.5 py-0.5'>{item?.status}</Tag></span></p>
+                                    <p>Patient Status - <span><Tag color="#2db7f5" className='text-uppercase text-xs font-medium me-2 px-2.5 py-0.5'>{item?.patientType}</Tag></span></p>
+                                    <p>Is Follow Up - <span><Tag color="#f50" className='text-uppercase text-xs font-medium me-2 px-2.5 py-0.5'>{item?.isFollowUp ? "Yes" : "No"}</Tag></span></p>
+                                    <p> Is Paid - <span><Tag color="#87d068" className='text-uppercase text-xs font-medium me-2 px-2.5 py-0.5'>{item?.paymentStatus}</Tag></span></p>
+                                    <p> Prescribed - <span><Tag color="#2db7f5" className='text-uppercase text-xs font-medium me-2 px-2.5 py-0.5'>{item?.prescriptionStatus}</Tag></span></p>
                                 </div>
                             </div>
-                            <div className='d-flex gap-2'>
-                                <Link to={`/dashboard/appointments/${item?.id}`}>
-                                    <Button type="primary" icon={<FaEye />} size="small">View</Button>
+                            <div className='d-flex gap-2' variant="filled">
+                                <Link to={`/dashboard/appointments/${item?._id}`}>
+                                    <Button type="primary" variant="filled" icon={<FaEye />} size="small">View</Button>
                                 </Link>
                                 {
                                     item.prescriptionStatus === 'notIssued'
                                         ?
                                         <Link to={`/dashboard/appointment/treatment/${item?.id}`}>
-                                            <Button type="primary" icon={<FaBriefcaseMedical />} size="small">Treatment</Button>
+                                            <Button type="primary" variant="filled" icon={<FaBriefcaseMedical />} size="small">Treatment</Button>
                                         </Link>
                                         :
                                         <Link to={`/dashboard/prescription/${item?.prescription[0]?.id}`}>
-                                            <Button type="primary" icon={<FaEye />} size="small" >Prescription</Button>
+                                            <Button type="primary"  variant="filled" icon={<FaEye />} size="small" >Prescription</Button>
                                         </Link>
                                 }
                                 {
                                     item?.isFollowUp && <Link to={`/dashboard/appointment/treatment/edit/${item?.prescription[0]?.id}`}>
-                                        <Button type="primary" icon={<FaBriefcaseMedical />} size="small">Follow Up</Button>
+                                        <Button type="primary" variant="filled" icon={<FaBriefcaseMedical />} size="small">Follow Up</Button>
                                     </Link>
                                 }
 

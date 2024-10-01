@@ -1,5 +1,5 @@
 import React from 'react';
-import img from '../../../images/doc/doctor 3.jpg';
+import img from '../../../images/dummy_pic1.png';
 import moment from 'moment';
 import { useGetPatientAppointmentsQuery, useGetPatientInvoicesQuery } from '../../../redux/api/appointmentApi';
 import { useGetPatientPrescriptionQuery } from '../../../redux/api/prescriptionApi';
@@ -14,7 +14,7 @@ const PatientDashboard = () => {
     const { data, isLoading: pIsLoading } = useGetPatientAppointmentsQuery();
     const { data: prescriptionData, prescriptionIsLoading } = useGetPatientPrescriptionQuery();
     const { data: invoices, isLoading: InvoicesIsLoading } = useGetPatientInvoicesQuery();
-    
+    console.log(data);
     const InvoiceColumns = [
         {
             title: 'Doctor',
@@ -27,8 +27,8 @@ const PatientDashboard = () => {
                             <img className="avatar-img rounded-circle" src={img} alt="" />
                         </div>
                         <div>
-                            <h6 className='text-nowrap mb-0'>{data?.appointment?.doctor?.firstName + ' ' + data?.appointment?.doctor?.lastName}</h6>
-                            <p className='form-text'>{data?.appointment?.doctor?.designation}</p>
+                            <h6 className='text-nowrap mb-0'>{data?.appointment?.doctorId?.firstName + ' ' + data?.appointment?.doctorId?.lastName}</h6>
+                            <p className='form-text'>{data?.appointment?.doctorId?.designation}</p>
                         </div>
                     </div>
                 )
@@ -66,7 +66,7 @@ const PatientDashboard = () => {
             width: 100,
             render: function (data) {
                 return (
-                    <Link to={`/booking/invoice/${data?.appointment?.id}`}>
+                    <Link to={`/booking/invoice/${data?.appointment?._id}`}>
                         <Button type='primary' size='medium'>View</Button>
 
                     </Link>
@@ -86,8 +86,8 @@ const PatientDashboard = () => {
                             <img className="avatar-img rounded-circle" src={img} alt="" />
                         </div>
                         <div>
-                            <h6 className='text-nowrap mb-0'>{data?.doctor?.firstName + ' ' + data?.doctor?.lastName}</h6>
-                            <p className='form-text'>{data?.doctor?.designation}</p>
+                            <h6 className='text-nowrap mb-0'>{data?.doctorId?.firstName + ' ' + data?.doctorId?.lastName}</h6>
+                            <p className='form-text'>{data?.doctorId?.designation}</p>
                         </div>
                     </div>
                 </>
@@ -169,8 +169,8 @@ const PatientDashboard = () => {
                             <img className="avatar-img rounded-circle" src={img} alt="" />
                         </div>
                         <div>
-                            <h6 className='text-nowrap mb-0'>{data?.doctor?.firstName + ' ' + data?.doctor?.lastName}</h6>
-                            <p className='form-text'>{data?.doctor?.designation}</p>
+                            <h6 className='text-nowrap mb-0'>{data?.doctorId?.firstName + ' ' + data?.doctorId?.lastName}</h6>
+                            <p className='form-text'>{data?.doctorId?.designation}</p>
                         </div>
                     </div>
                 </>
@@ -208,7 +208,7 @@ const PatientDashboard = () => {
             width: 100,
             render: function (data) {
                 return (
-                    <Link to={`/dashboard/appointments/${data.id}`}>
+                    <Link to={`/dashboard/appointments/${data._id}`}>
                         <Button type='primary'>View</Button>
                     </Link>
                 )

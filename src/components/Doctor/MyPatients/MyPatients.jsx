@@ -1,5 +1,6 @@
 import React from 'react';
 import img from '../../../images/avatar.jpg';
+import dummy_pic from '../../../images/dummy_pic1.png';
 import DashboardLayout from '../DashboardLayout/DashboardLayout';
 import { useGetDoctorPatientsQuery } from '../../../redux/api/appointmentApi';
 import moment from 'moment';
@@ -22,7 +23,7 @@ const MyPatients = () => {
                 <div className="w-100 mb-3 rounded p-3 text-center" style={{ background: '#f8f9fa' }}>
                     <div className="">
                         <Link to={'/'} className="my-3 patient-img">
-                            <img src={data?.patient?.img ? data?.patient?.img : img} alt="" />
+                            <img src={data?.patient?.img ? data?.patient?.img : dummy_pic} alt="" />
                         </Link>
                         <div className="patients-info mt-4">
                             <h5>{getInitPatientName(item)}</h5>
