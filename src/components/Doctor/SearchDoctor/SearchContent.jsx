@@ -60,7 +60,7 @@ const SearchContent = ({ data }) => {
 
                             <div className="clinic-details">
                                 <div className="text-secondary my-1 d-flex align-items-center">
-                                    <ImLocation />
+                                    {data?.clinicAddress && <ImLocation />}
                                     {data?.clinicAddress}
                                 </div>
                                 {/* <ul className="clinic-gallery mt-3">

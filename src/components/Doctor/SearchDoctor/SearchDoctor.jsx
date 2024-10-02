@@ -57,8 +57,6 @@ const SearchDoctor = () => {
     const doctorsData = data?.doctors;
     const meta = data?.meta;
 
-    console.log('data: ', doctorsData, meta);
-
     //what to render
     let content = null;
     if (isLoading) content = <>Loading ...</>;
@@ -78,7 +76,7 @@ const SearchDoctor = () => {
         );
 
     const onShowSizeChange = (current, pageSize) => {
-        setPage(page);
+        setPage(current);
         setSize(pageSize);
     };
 
@@ -106,7 +104,7 @@ const SearchDoctor = () => {
                             <div className="text-center mt-5 mb-5">
                                 <Pagination
                                     showSizeChanger
-                                    onShowSizeChange={onShowSizeChange}
+                                    onChange={onShowSizeChange}
                                     total={meta?.total}
                                     pageSize={size}
                                 />
