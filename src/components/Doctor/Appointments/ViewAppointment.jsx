@@ -9,16 +9,19 @@ import { Button, Tag, Tooltip } from 'antd';
 import { clickToCopyClipBoard } from '../../../utils/copyClipBoard';
 import { FaPrint } from "react-icons/fa";
 import ReactToPrint from "react-to-print";
+import dummy_pic from '../../../images/dummy_pic2.jpg';
+import no_doctor_image from '../../../images/no_doctor_image.jpg';
 
 const ViewAppointment = () => {
     const ref = useRef();
     const { id } = useParams();
     const { data, isLoading, isError } = useGetSingleAppointmentQuery(id);
 
+
     let content = null;
     if (!isLoading && isError) content = <div>Something Went Wrong!</div>
     if (isLoading && !isError) content = <h2>Loading...</h2>
-    if (!isLoading && !isError && data?.id) content =
+    if (!isLoading && !isError && data?._id) content =
         <>
             <page size="A4" className="container mx-auto border border-primary-subtle p-3 pb-3">
                 <div className='d-flex justify-content-between rounded p-2' style={{ background: '#f2f4fe' }}>
@@ -46,7 +49,7 @@ const ViewAppointment = () => {
                     </h4>
                     <div className='border border-light-subtle rounded p-3'>
                         <p className='mb-1'>Place of Meeting : <Tag bordered={false} color="#f50">ONLINE</Tag></p>
-                        <p className='mb-1'>Meeting Link : <a href="https://meet.google.com/udx-kieq-sng" target='_blank' rel='noreferrer'>https://meet.google.com/udx-kieq-sng</a></p>
+                        <p className='mb-1'>Meeting Link : <a href="https://meet.google.com/landing" target='_blank' rel='noreferrer'>https://meet.google.com/landing</a></p>
                         <p className='mb-1'>Meeting Date : <Tag bordered={false} color="orange">{moment(data?.scheduleDate).format('LL')}</Tag></p>
                         <p className='mb-1'>Meeting Time : <Tag bordered={false} color="orange">{data?.scheduleTime}</Tag></p>
                     </div>
@@ -55,16 +58,16 @@ const ViewAppointment = () => {
                 <div>
                     <h4 className='text-center my-3 fw-bold text-secondary'>DOCTOR INFOMATION</h4>
                     {
-                        data?.doctor &&
+                        data?.doctorId &&
                         <div className='border border-light-subtle rounded p-3 d-flex gap-3'>
                             <div>
-                                <img src={data?.doctor?.img} alt="" style={{ border: '2px solid #ffbc21', width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'top' }} />
+                                <img src={data?.doctorId?.img ?? no_doctor_image} alt="" style={{ border: '2px solid #ffbc21', width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'top' }} />
                             </div>
                             <div>
-                                <h4 className="mb-1">{data?.doctor?.firstName && data?.doctor?.lastName ? `${data.doctor.firstName} ${data.doctor.lastName}` : (data?.doctor?.firstName || data?.doctor?.lastName)}</h4>
-                                <p className="mb-1">{data?.doctor?.specialization}</p>
-                                <p className="mb-1 form-text">{data?.doctor?.designation}</p>
-                                <p className="mb-1 form-text">{data?.doctor?.college}</p>
+                                <h4 className="mb-1">{data?.doctorId?.firstName && data?.doctor?.lastName ? `${data.doctorId.firstName} ${data.doctorId.lastName}` : (data?.doctorId?.firstName || data?.doctorId?.lastName)}</h4>
+                                <p className="mb-1">{data?.doctorId?.specialization}</p>
+                                <p className="mb-1 form-text">{data?.doctorId?.designation}</p>
+                                <p className="mb-1 form-text">{data?.doctorId?.college}</p>
                             </div>
                         </div>
                     }
@@ -74,14 +77,14 @@ const ViewAppointment = () => {
                     <h4 className='text-center my-3 fw-bold text-secondary'>PATIENT INFOMATION</h4>
                     <div className='border border-light-subtle rounded p-3 d-flex gap-3'>
                         <div>
-                            <img src={data?.patient?.img} alt="" style={{ border: '2px solid #ffbc21', width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'top' }} />
+                            <img src={data?.patientId?.img ?? dummy_pic} alt="" style={{ border: '2px solid #ffbc21', width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'top' }} />
                         </div>
                         <div>
 
-                            <h4 className="mb-1">{data?.patient?.firstName + ' ' + data?.patient?.lastName}</h4>
-                            <p className="mb-1 form-text">Age : {moment().diff(moment(data?.patient?.dateOfBirth), 'years')}</p>
-                            <p className="mb-1 form-text">Blood Group : {data?.patient?.bloodGroup}</p>
-                            <p className="mb-1 form-text">{data?.patient?.city + ' , ' + data?.patient?.state + ' , ' + data?.patient?.country}</p>
+                            <h4 className="mb-1">{data?.patientId?.firstName + ' ' + data?.patientId?.lastName}</h4>
+                            <p className="mb-1 form-text">Age : {moment().diff(moment(data?.patientId?.dateOfBirth), 'years')}</p>
+                            <p className="mb-1 form-text">Blood Group : {data?.patientId?.bloodGroup}</p>
+                            <p className="mb-1 form-text">{data?.patientId?.city + ' , ' + data?.patientId?.state + ' , ' + data?.patientId?.country}</p>
 
                             <div className='mt-2'>
                                 <p>Reason for Visit - <span className='text-warning'>{data?.reasonForVisit}</span></p>

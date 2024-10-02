@@ -45,10 +45,10 @@ const Header = () => {
     };
 
     const content = (
-        <div className="nav-popover">
-            <div className="my-2">
+        <div className="nav-popover flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <div className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 <h5 className="text-capitalize">{data?.firstName + ' ' + data?.lastName}</h5>
-                <p className="my-0">{data?.email}</p>
+                <p className="my-2">{data?.email}</p>
                 <Link to="/dashboard">Dashboard</Link>
             </div>
             <Button variant="outline-danger" className="w-100" size="sm" onClick={hanldeSignOut}>

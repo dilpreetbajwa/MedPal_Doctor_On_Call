@@ -15,6 +15,7 @@ declare global {
 export const auth = (...rules: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.headers.authorization;
+        console.log(token);
         if (!token) {
             throw new ApiError(404, "Token is not Found !!")
         }

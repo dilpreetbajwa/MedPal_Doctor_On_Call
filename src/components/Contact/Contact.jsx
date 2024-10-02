@@ -38,7 +38,7 @@ const Contact = () => {
                                     <FaLocationArrow className='icon' />
                                     <div>
                                         <h4>Location:</h4>
-                                        <p>1212 Dhaka, Kazi Nozrul Avenur, Sylhet, Bangladesh 03214</p>
+                                        <p>Toronto, Ontario</p>
                                     </div>
                                 </div>
 
@@ -46,7 +46,7 @@ const Contact = () => {
                                     <FaEnvelope className='icon' />
                                     <div>
                                         <h4>Email:</h4>
-                                        <p>ujjalzaman@gmail.com</p>
+                                        <p>medpal@gmail.com</p>
                                     </div>
                                 </div>
 
@@ -54,7 +54,7 @@ const Contact = () => {
                                     <FaPhoneAlt className='icon' />
                                     <div>
                                         <h4>Call:</h4>
-                                        <p>+88 01751 040425</p>
+                                        <p>+1 123 456 4578</p>
                                     </div>
                                 </div>
                             </div>
