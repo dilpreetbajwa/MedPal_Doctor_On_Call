@@ -3,15 +3,15 @@ export type IOption = {
     limit?: number | undefined;
     sortBy?: string;
     sortOrder?: 'asc' | 'dsc';
-}
+};
 
 type IOptionResult = {
-    page?: number | undefined;
-    limit?: number | undefined;
+    page: number;
+    limit: number;
     sortBy?: string;
     sortOrder?: any;
-    skip?: number | undefined;
-}
+    skip: number;
+};
 
 const calculatePagination = (options: IOption): IOptionResult => {
     const page = Number(options.page || 1);
@@ -22,8 +22,12 @@ const calculatePagination = (options: IOption): IOptionResult => {
     const sortOrder = options.sortOrder || 'desc';
 
     return {
-        page, limit, skip, sortBy, sortOrder
-    }
-}
+        page,
+        limit,
+        skip,
+        sortBy,
+        sortOrder,
+    };
+};
 
 export default calculatePagination;

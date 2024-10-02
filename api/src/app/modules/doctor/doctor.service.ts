@@ -77,7 +77,7 @@ const create = async (payload: any): Promise<any> => {
 };
 
 const getAllDoctors = async (filters: any, options: IOption): Promise<IGenericResponse<IDoctor[]>> => {
-    const { limit, page } = calculatePagination(options);
+    const { limit, page, skip } = calculatePagination(options);
     const { searchTerm, max, min, specialist, gender } = filters;
     const andCondition: any = [];
 
@@ -110,7 +110,7 @@ const getAllDoctors = async (filters: any, options: IOption): Promise<IGenericRe
 
     const whereCondition = andCondition.length > 0 ? { $and: andCondition } : {};
 
-    const result = await Doctor.find(whereCondition);
+    const result = await Doctor.find(whereCondition).skip(skip).limit(limit);
 
     const total = await Doctor.countDocuments(whereCondition);
 
