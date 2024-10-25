@@ -33,9 +33,6 @@ const SocialSignUp = () => {
     }
   };
 
-  //    getting error
-  /*  Can't load URL
-The domain of this URL isn't included in the app's domains. To be able to load this URL, add all domains and sub-domains of your app to the App Domains field in your app settings.  */
   const handleFacebookSignIn = async () => {
     console.log("Facebook Sign In");
     const provider = new FacebookAuthProvider();
