@@ -39,7 +39,6 @@ const OurDoctors = () => {
             <div className="container">
                 <div className="section-title text-center mb-3">
                     <h2>OUR DOCTORS</h2>
-                    <p className='form-text'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus, adipisci?</p>
                 </div>
 
                 <div className="row">
