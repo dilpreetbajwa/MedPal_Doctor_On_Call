@@ -2,7 +2,6 @@ import Appointment from "./appointment.model";
 import Patient from "../patient/patient.model";
 import Payment from "../../models/payment.model";
 import Doctor from "../doctor/doctor.model";
-import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/apiError";
 import httpStatus from "http-status";
 import moment from 'moment';
@@ -10,6 +9,11 @@ import { EmailtTransporter } from "../../../helpers/emailTransporter";
 import * as path from 'path';
 import config from "../../../config";
 import mongoose from "mongoose";
+import Stripe from 'stripe';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const stripe = new Stripe(config.stripe_secretkey as string); // Replace with your actual secret key
 
 const createAppointment = async (payload: any): Promise<any | null> => {
    
@@ -56,24 +60,34 @@ const createAppointment = async (payload: any): Promise<any | null> => {
         }], { session });
 
 
-        const { paymentMethod, paymentType } = payment;
-        const docFee = Number(isDoctorExist.price);
+        //const docFee = Number(isDoctorExist.price);
+        const docFee = Number('100');
         const vat = (15 / 100) * (docFee + 10);
+        const totalAmount = (vat + docFee + 10); // Include booking fee
 
-        if (appointment[0]._id) {
-            await Payment.create([{
-                appointmentId: appointment[0]._id,
-                bookingFee: 10,
-                paymentMethod: paymentMethod,
-                paymentType: paymentType,
-                vat: vat,
-                DoctorFee: docFee,
-                totalAmount: (vat + docFee),
-            }], { session });
-        }
+        // Create a payment intent with Stripe
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Math.round(totalAmount * 100), // Amount in cents
+            currency: 'usd', // Change to your desired currency
+            receipt_email: patientInfo.email, // Optional: Send receipt to email
+            
+        });
 
-        await session.commitTransaction();
-        session.endSession();
+        console.log(paymentIntent);
+
+        // Confirm the payment
+        const { paymentMethod } = payment; // Ensure this is provided from the client side
+        await Payment.create([{
+            appointmentId: appointment[0]._id,
+            bookingFee: 10,
+            paymentMethod: paymentMethod,
+            paymentType: payment.paymentType,
+            vat: vat,
+            DoctorFee: docFee,
+            totalAmount: totalAmount,
+            paymentStatus: 'paid', // Update status after successful payment
+        }], { session });
+
 
         console.log(appointment[0])
 

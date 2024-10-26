@@ -13,6 +13,7 @@ import Location from './Location';
 import Review from './Review';
 import Availibility from './Availibility';
 
+
 const DoctorProfile = () => {
     const { id } = useParams();
     const { data, isLoading, isError } = useGetDoctorQuery(id);
@@ -49,6 +50,7 @@ const DoctorProfile = () => {
         <>
             <Header />
             <SubHeader title='Doctor Details' subtitle='Lorem ipsum dolor sit amet.' />
+       
             <div className="container" style={{ marginBottom: '4rem', marginTop: '6rem' }}>
                 {content}
                 <div className='p-4 rounded' style={{ marginBottom: '7rem', backgroundColor: '#f3f3f3' }}>

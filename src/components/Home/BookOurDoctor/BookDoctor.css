@@ -61,6 +61,7 @@
 .view-profile-btn{
     border-color: #1977cc !important;
     color: #1977cc !important;
+    margin: 10px;
 }
 .view-profile-btn:hover{
     color: #fff !important;
@@ -69,7 +70,8 @@
 .book-btn{
     background-color: #1977cc !important;
     border: none;
-    color: #fff !important;    
+    color: #fff !important;   
+    background:linear-gradient(45deg, #00000082, transparent) 
 }
 
 .star {

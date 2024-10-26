@@ -1,16 +1,10 @@
 import { Document } from 'mongoose';
+import { IScheduleDay } from '../../models/scheduledday.model';
 
 export interface IDoctorTimeSlot extends Document {
-    email: string;
-    firstName: string;
-    lastName: string;
-    bloodGroup?:  String;
-    mobile?: String;
-    city?: String;
-    state?:String;
-    zipCode?: String;
-    gender?: String;
-    country?:  String;
-    address?: String;
-    img?: String;
+  doctorId: string;
+  day: string;
+  timeSlot: IScheduleDay[];
+  weekDay?: string;
+  maximumPatient?: string;
   }

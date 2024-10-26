@@ -3,6 +3,7 @@ import './index.css';
 import img from '../../../images/doc/doc1.jpg'
 import img2 from '../../../images/doc/doc4.jpg'
 import img3 from '../../../images/doc/doctor 5.jpg'
+import service1 from '../../../images/service1.jpg'
 import { Link } from 'react-router-dom';
 
 const Service = () => {
@@ -22,7 +23,7 @@ const Service = () => {
                     </div>
                     <div className="col-lg-4 col-sm-6">
                         <div className="service-img mt-4 mt-lg-0">
-                            <img src={img3} alt="" className="img-fluid" />
+                            <img src={service1} alt="" className="img-fluid" />
                         </div>
                     </div>
                     <div className="col-lg-4">

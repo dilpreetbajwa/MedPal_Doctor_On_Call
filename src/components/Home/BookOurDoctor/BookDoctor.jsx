@@ -89,8 +89,8 @@ const BookDoctor = () => {
 									</li>
 								</ul>
 								<div className="d-flex justify-content-between align-items-center">
-									<Link to={`/doctors/profile/${item?._id}`} className="btn  btn-outline-info btn-sm view-profile-btn">Profile</Link>
-									<Link to={`/booking/${item?._id}`} className="btn btn-sm book-btn">Book</Link>
+									<Link to={`/doctors/profile/${item?._id}`} className="btn  btn-outline-info btn-sm w-50 view-profile-btn">Profile</Link>
+									<Link to={`/booking/${item?._id}`} className="btn btn-sm w-50 book-btn">Book</Link>
 								</div>
 							</div>
 						</div >

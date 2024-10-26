@@ -27,7 +27,7 @@ const Contact = () => {
     return (
         <>
             <Header />
-            <SubHeader title="Contact us" subtitle="Lorem ipsum dolor sit amet consectetur adipisicing." />
+            <SubHeader title="Contact us" subtitle="" />
             <section id="contact" className="contact mt-5 mb-5">
                 <div className="container" style={{ marginTop: 80, marginBottom: 120 }}>
                     <div className="row">
@@ -58,7 +58,6 @@ const Contact = () => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                         <div className="col-lg-8">

@@ -3,6 +3,14 @@ import './index.css';
 import Header from '../Shared/Header/Header';
 import Footer from '../Shared/Footer/Footer';
 import ImageHeading from '../../images/doc/doctor 5.jpg'
+import no_doctor_image from '../../images/no_doctor_image.jpg'
+import people1 from '../../images/people1.png'
+import people2 from '../../images/people2.png'
+import people3 from '../../images/people3.png'
+import quote from '../../images/quote.svg'
+import clock from '../../images/clock.svg'
+import phone from '../../images/phone.svg'
+import marker from '../../images/marker.svg'
 import img from '../../images/logo.png'
 import SubHeader from '../Shared/SubHeader';
 import { useGetAllBlogsQuery } from '../../redux/api/blogApi';
@@ -18,6 +26,83 @@ const About = () => {
     const blogData = data?.blogs;
     const doctors = doctorData?.doctors;
 
+        const testimonialData = [
+            {
+                id: 1, 
+                name: 'Winson Herry',
+                img: people1,
+                review: 'It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content',
+                location: 'California'
+            },
+            {
+                id: 2, 
+                name: 'Winson Herry',
+                img: people2,
+                review: 'It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content',
+                location: 'California'
+            },
+            {
+                id: 3, 
+                name: 'Winson Herry',
+                img: people3,
+                review: 'It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content',
+                location: 'California'
+            },
+        ];
+
+        const openingBoxData = [
+            {
+                id: 1,
+                name: 'Opening Hours',
+                description: 'Open 9.00 am to 5.00pm everyday',
+                icon: clock,
+                bgClass: 'opening-box-gradient'
+            },
+            {
+                id: 2,
+                name: 'Our Locations',
+                description: 'Open 9.00 am to 5.00pm everyday',
+                icon: marker,
+                bgClass: 'opening-box-theme'
+            },
+            {
+                id: 3,
+                name: 'Contact Us',
+                description: 'Open 9.00 am to 5.00pm everyday',
+                icon: phone,
+                bgClass: 'opening-box-gradient'
+            },
+        ];
+
+        const Testimonial = ({ review }) => {
+            const { name, img, review: userReview, location } = review;
+            return (
+                <div className='testimonial-card'>
+                    <p className='testimonial-review'>{ userReview }</p>
+                    <div className='testimonial-footer'>
+                        <img className='testimonial-image' src={ img } alt={ name } />
+                        <div>
+                            <h3 className='testimonial-name'>{ name }</h3>
+                            <p className='testimonial-location'>{ location }</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+    
+        const OpeningBox = ({ card }) => {
+            const { name, description, icon, bgClass } = card;
+            return (
+                <div className={`opening-box ${bgClass}`}>
+                    <img src={icon} alt={name} />
+                    <div>
+                        <h2 className="opening-box-title">{ name }</h2>
+                        <p>{ description }</p>
+                    </div>
+                </div>
+            );
+        };
+
     let doctorContent = null;
     if (!DoctorIsLoading && doctorIsError) doctorContent = <div>Something Went Wrong !</div>
     if (!DoctorIsLoading && !doctorIsError && doctors?.length === 0) doctorContent = <div><Empty /></div>
@@ -26,7 +111,11 @@ const About = () => {
             {doctors && doctors.map((item, id) => (
                 <div className="col-lg-3 col-md-6 col-sm-6" key={id + item.id}>
                     <div className="card shadow border-0 mb-5 mb-lg-0">
-                        {item.img && <img src={item.img} class="img-fluid w-100" alt="" />}
+                            {item?.img ? (
+                                <img className="img-fluid" alt="" src={item.img} />
+                            ) : (
+                                <img className="img-fluid" alt="" src={no_doctor_image} /> // or any fallback UI
+                            )}
                         <div className="p-2">
                             <h4 className="mt-4 mb-0" style={{ color: '#223a66' }}><a>{item?.firstName + ' ' + item?.lastName}</a></h4>
                             <p>{item?.designation}</p>
@@ -45,6 +134,8 @@ const About = () => {
                 blogData && blogData?.map((item, id) => (
                     <div className="col-lg-3 col-md-6" key={id + item.id}>
                         <div className="card shadow border-0 mb-5 mb-lg-0">
+                       
+
                             <img src={item?.img} alt="blog Image" width={300} height={200} className="w-100  rounded-top image-hover" style={{ objectFit: 'contain' }} />
 
                             <div className='p-2'>
@@ -63,15 +154,15 @@ const About = () => {
     return (
         <>
             <Header />
-            <SubHeader title="about us" subtitle="Lorem ipsum dolor sit amet consectetur adipisicing." />
+            <SubHeader title="about us"/>
             <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
                 <div className="row p-5">
                     <div className="col-lg-4">
                         <div className='section-title text-center'>
                             <h2 className='text-uppercase'>Our Doctors Acheivement</h2>
-                            <p className='form-text m-0'>Lorem ipsum dolor sit amet.</p>
+                            {/* <p className='form-text m-0'>Lorem ipsum dolor sit amet.</p> */}
                         </div>
-                        <p className='mt-3'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quod laborum alias. Vitae dolorum, officia sit! Saepe ullam facere at, consequatur incidunt, quae esse, quis ut reprehenderit dignissimos, libero delectus.</p>
+                        <p className='mt-3'>Our doctors are dedicated to excellence in patient care and have achieved remarkable milestones in their fields. With numerous awards and recognitions, they bring a wealth of experience and expertise to our practice. From pioneering research to community outreach initiatives, our medical team consistently strives to improve patient outcomes and enhance the overall healthcare experience. Their commitment to ongoing education and innovation ensures that our patients receive the highest standard of care.</p>
                     </div>
 
                     <div className="col-lg-8">
@@ -81,35 +172,21 @@ const About = () => {
                 </div>
             </div>
 
-            <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
+            {/* <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
                 <div className="row">
                     {content}
                 </div>
-            </div>
+            </div> */}
 
-            <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
-                <div className="row align-items-center">
-                    <div className="col-lg-4">
-                        <div className='section-title text-center'>
-                            <h2 className='text-uppercase'>Our Doctors Acheivement</h2>
-                            <p className='form-text m-0'>Lorem ipsum dolor sit amet.</p>
-                        </div>
-                    </div>
-                    <div className="col-lg-8">
-                        <div className="row">
-                            {
-                                Array(6).fill(null).map((_, id) => (
-                                    <div className="col-lg-4 col-md-6 col-sm-6" key={id + 3}>
-                                        <div className="award-img">
-                                            <img src={img} alt="" className="img-fluid" />
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
+            <section className='opening-box-container'>
+                <div className='opening-box-grid'>
+                    {
+                        openingBoxData.map(card => (
+                            <OpeningBox key={ card.id } card={ card } />
+                        ))
+                    }
                 </div>
-            </div>
+            </section>
 
             <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
                 <div className="row justify-content-center">
@@ -126,6 +203,25 @@ const About = () => {
 
                 </div>
             </div>
+
+            <section className='testimonials-container'>
+                <div className='testimonials-header'>
+                    <div>
+                        <h4 className='appointment-title'>Appointment</h4>
+                        <h2 className="testimonial-title">What Our Patients Says</h2>
+                    </div>
+                    <figure>
+                        <img className='quote-image' src={quote} alt="Quote" />
+                    </figure>
+                </div>
+                <div className='testimonials-grid'>
+                    {
+                        testimonialData.map(review => (
+                            <Testimonial key={ review.id } review={ review } />
+                        ))
+                    }
+                </div>
+            </section>
 
             <div className="container say-about" style={{ marginBottom: 100, marginTop: 100 }}>
                 <div className="row">

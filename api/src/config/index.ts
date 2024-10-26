@@ -29,6 +29,7 @@ const config = {
     backendLocalUrl: process.env.BACKEND_LOCAL_URL,
     mongoUrl: process.env.MONGO_URL,
     mongoLocalUrl: process.env.MONGO_LOCAL_URL,
+    stripe_secretkey: process.env.STRIPE,
 };
 
 export default config;
