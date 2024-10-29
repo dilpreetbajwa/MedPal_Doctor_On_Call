@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Footer from '../../Shared/Footer/Footer'
 import img from '../../../images/no_doctor_image.jpg'
+import no_data_image from '../../../images/no_data_image.jpg'
 import './index.css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Empty, Button, message, Steps } from 'antd';
@@ -15,12 +16,15 @@ import { useCreateAppointmentMutation } from '../../../redux/api/appointmentApi'
 import { useDispatch } from 'react-redux';
 import { addInvoice } from '../../../redux/feature/invoiceSlice';
 import Header from '../../Shared/Header/Header';
+import SubHeader from '../../Shared/SubHeader';
 import useAuthCheck from '../../../redux/hooks/useAuthCheck';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 const DoctorBooking = () => {
     const dispatch = useDispatch();
     let initialValue = {
-        paymentMethod: 'paypal',
+        paymentMethod: 'cash',
         paymentType: 'creditCard',
         firstName: '',
         lastName: '',
@@ -44,6 +48,7 @@ const DoctorBooking = () => {
     const [patientId, setPatientId] = useState('');
     const [createAppointment, { data: appointmentData, isSuccess: createIsSuccess, isError: createIsError, error: createError, isLoading: createIsLoading }] = useCreateAppointmentMutation();
     const { doctorId } = useParams();
+    const stripePromise = loadStripe('pk_test_51OmQqoDq6YDgmE8GmoBnhFMqt9eUYYj0p4c6OAKYyrDgzVAxS50KCY1tl9XbSxeJC9Iaq3Cb66GWCZhBLTakBHT7007qhqYwFB');
    
     const navigation = useNavigate();
     const { data, isLoading, isError, error } = useGetDoctorQuery(doctorId);
@@ -51,17 +56,21 @@ const DoctorBooking = () => {
     const [selectValue, setSelectValue] = useState(initialValue);
     const [IsdDisable, setIsDisable] = useState(true);
     const [IsConfirmDisable, setIsConfirmDisable] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false); // New state for form validity
+    const [paymentData, setPaymentData] = useState(null);
 
     const handleChange = (e) => { setSelectValue({ ...selectValue, [e.target.name]: e.target.value }) }
-
+    console.log(data);
+    
     useEffect(() => {
-       
+       console.log(isFormValid);
         const { firstName, lastName, email, phone, nameOnCard, cardNumber, expiredMonth, cardExpiredYear, cvv, reasonForVisit } = selectValue;
-        const isInputEmpty = !firstName || !lastName || !email || !phone || !reasonForVisit;
-        const isConfirmInputEmpty = !nameOnCard || !cardNumber || !expiredMonth || !cardExpiredYear || !cvv || !isCheck;
+        const isInputEmpty = !firstName || !lastName || !email || !phone || !reasonForVisit || !isFormValid ;
+        const isConfirmInputEmpty = !nameOnCard || !isCheck;
+        
         setIsDisable(isInputEmpty);
         setIsConfirmDisable(isConfirmInputEmpty);
-    }, [selectValue, isCheck])
+    }, [selectValue, isCheck, isFormValid])
 
 
     const handleDateChange = (_date, dateString) => {
@@ -78,13 +87,16 @@ const DoctorBooking = () => {
     let dContent = null;
     if (dIsLoading) dContent = <div>Loading ...</div>
     if (!dIsLoading && dIsError) dContent = <div>Something went Wrong!</div>
-    if (!dIsLoading && !dIsError && time.length === 0) dContent = <Empty children="Doctor Is not Available" />
+    if (!dIsLoading && !dIsError && time.length === 0) dContent =
+                     <Empty 
+                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                        children="Doctor Is not Available" />
     if (!dIsLoading && !dIsError && time.length > 0) dContent =
         <>
             {
                 time && time.map((item, id) => (
                     <div className="col-md-4" key={id + 155}>
-                        <Button type={item?.slot?.time === selectTime ? "primary" : "default"} shape="round" size='large' className='mb-3' onClick={() => handleSelectTime(item?.slot?.time)}> {item?.slot?.time} </Button>
+                        <Button type={item?.slot?.time === selectTime ? "primary" : "default"} shape="square" size='large' className='mb-3 timing' onClick={() => handleSelectTime(item?.slot?.time)}> {item?.slot?.time} </Button>
                     </div>
                 ))
             }
@@ -121,19 +133,25 @@ const DoctorBooking = () => {
         },
         {
             title: 'Patient Information',
-            content: <PersonalInformation handleChange={handleChange} selectValue={selectValue} setPatientId={setPatientId}/>
+            content: <PersonalInformation handleChange={handleChange} selectValue={selectValue} setPatientId={setPatientId} setIsFormValid={setIsFormValid} />
         },
         {
             title: 'Payment',
-            content: <CheckoutPage
+            content:
+            <Elements stripe={stripePromise}>
+                 <CheckoutPage
                 handleChange={handleChange}
                 selectValue={selectValue}
                 isCheck={isCheck}
                 setIsChecked={setIsChecked}
-                data={data}
+                onPaymentSuccess={(data) => setPaymentData(data)} // Capture payment data
+                
                 selectedDate={selectedDate}
                 selectTime={selectTime}
-            />,
+            />
+            </Elements>
+            
+           ,
         },
     ]
 
@@ -144,6 +162,7 @@ const DoctorBooking = () => {
 
     const handleConfirmSchedule = () => {
         const obj = {};
+        console.log(paymentData);
         obj.patientInfo = {
             firstName: selectValue.firstName,
             lastName: selectValue.lastName,
@@ -155,14 +174,14 @@ const DoctorBooking = () => {
             patientId: role !== '' && role === 'patient' ? patientId : undefined,
         }
         obj.payment = {
-            paymentType: selectValue.paymentType,
-            paymentMethod: selectValue.paymentMethod,
-            cardNumber: selectValue.cardNumber,
-            cardExpiredYear: selectValue.cardExpiredYear,
-            cvv: selectValue.cvv,
-            expiredMonth: selectValue.expiredMonth,
+            paymentType: paymentData.paymentTypedata,
+            paymentMethod: paymentData.paymentTypedata,
+            cardExpiredYear: paymentData.cardExpiredYeardata,
+            expiredMonth: paymentData.expiredMonthdata,
             nameOnCard: selectValue.nameOnCard
         }
+
+        console.log(obj);
         createAppointment(obj);
     }
 
@@ -180,6 +199,7 @@ const DoctorBooking = () => {
     return (
         <>
             <Header />
+            <SubHeader title='Appointment Booking' subtitle='Doctor/Appointment' />
             <div className="container" style={{ marginBottom: '12rem', marginTop: '8rem' }}>
                 <Steps current={current} items={items} />
                 <div className='mb-5 mt-3 mx-3'>{steps[current].content}</div>

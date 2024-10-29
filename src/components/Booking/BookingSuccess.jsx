@@ -30,7 +30,6 @@ const BookingSuccess = () => {
             <div className="container mx-auto d-flex justify-content-center align-items-center text-center">
                 {
                     data?.id ?
-
                         <div className=" p-3" style={{ marginTop: '8rem', marginBottom: '5rem', height: '60vh', background: '#f8f9fa', maxWidth: '400px' }}>
 
                             <div className='border-bottom my-2'>
@@ -38,8 +37,6 @@ const BookingSuccess = () => {
                                 <h6 className='py-2'>Meeting is scheduled</h6>
                                 <p className='text-secondary border rounded-pill form-text text-success border-success'>Check your Inbox an email with all details!</p>
                             </div>
-
-
                             <div>
                                 <Tooltip title="Copy Tracking Id">
                                     <Button>
@@ -47,8 +44,6 @@ const BookingSuccess = () => {
                                     </Button>
                                 </Tooltip>
                             </div>
-
-
                             <div className='card border-0 p-3 rounded mb-5'>
                                 <div className='d-flex gap-3 mb-2 align-items-center'>
                                     <FaAlignLeft style={{ fontSize: '1rem' }}/>

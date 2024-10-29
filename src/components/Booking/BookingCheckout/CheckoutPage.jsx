@@ -1,113 +1,98 @@
+import React, { useEffect } from 'react';
 import moment from 'moment';
 import img from '../../../images/avatar.jpg';
 import { Link } from 'react-router-dom';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import './BookingCheckout.css';
 
-const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, selectedDate, selectTime }) => {
-    const { nameOnCard, cardNumber, expiredMonth, cardExpiredYear, cvv, paymentType, paymentMethod } = selectValue;
-    const handleCheck = () => {
-        setIsChecked(!isCheck)
-    }
+const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, selectedDate, selectTime , onPaymentSuccess}) => {
+    const { nameOnCard } = selectValue;
+    const stripe = useStripe();
+    const elements = useElements();
+
+    const handleCheck = async () => {
+        setIsChecked(!isCheck);
+
+        // If the checkbox is being checked
+        if (!isCheck) {
+            await handlePayment();
+        }
+    };
 
     let price = data?.price ? data.price : 60;
-    let doctorImg = data?.img ? data?.img : img
+    let doctorImg = data?.img ? data?.img : img;
 
-    const vat = (15 / 100) * (Number(price))
+    const vat = (15 / 100) * Number(price);
+    const totalAmount = Number(price) + 10 + vat;
+
+    const handlePayment = async () => {
+        if (!stripe || !elements) return;
+
+        const cardElement = elements.getElement(CardElement);
+        
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+        });
+
+        if (error) {
+            console.error(error);
+            // Handle error (e.g., show error message to the user)
+        } else {
+            // Send paymentMethod.id and any additional info to your server for processing
+            console.log('Payment Method:', paymentMethod);
+            // Call your server to process the payment with the paymentMethod.id
+            onPaymentSuccess({
+                paymentMethodId: paymentMethod.id, // Include additional payment info if needed
+                paymentTypedata:paymentMethod.type,
+                expiredMonthdata:paymentMethod.card.exp_month,
+                cardExpiredYeardata:paymentMethod.card.exp_year,
+
+            });
+        }
+    };
+
     return (
         <div className="container mt-5">
             <div className="row">
-                <div className="col-md-7" >
+                <div className="col-md-7">
                     <div className="rounded p-3" style={{ background: "#f8f9fa" }}>
-
-                        <div className='row'>
-                            <div className="col-md-6 mb-2">
-                                <label className="payment-radio credit-card-option">
-                                    <input type="radio"
-                                        name="paymentType"
-                                        value="creditCard"
-                                        onChange={(e) => handleChange(e)}
-                                        checked={paymentType === 'creditCard'}
-                                    />
-                                    <span className="ms-2"></span>
-                                    Credit card
-                                </label>
-                            </div>
-                            <div className="col-md-6 mb-2">
-                                <label className="payment-radio credit-card-option">
-                                    <input type="radio"
-                                        name="paymentType"
-                                        value="cash"
-                                        onChange={(e) => handleChange(e)}
-                                        checked={paymentType === 'cash'}
-                                    />
-                                    <span className="ms-2"></span>
-                                    Cash
-                                </label>
-                            </div>
-                            <di mb-3v className="col-md-6">
-                                <div className="form-group card-label mb-3">
-                                    <label htmlFor="card_name">Name on Card</label>
-                                    <input className="form-control" id="card_name" value={nameOnCard && nameOnCard} type="text" onChange={(e) => handleChange(e)} name='nameOnCard' />
+                        <form>
+                            <div className='row'>
+                                <div className="col-md-6 mb-2">
                                 </div>
-                            </di>
-                            <div className="col-md-6">
-                                <div className="form-group card-label mb-3">
-                                    <label htmlFor="card_number">Card Number</label>
-                                    <input className="form-control" id="card_number" value={cardNumber && cardNumber} placeholder="1234  5678  9876  5432" type="number" onChange={(e) => handleChange(e)} name='cardNumber' />
+                                <div className="col-md-6 mb-2">
+                                    {/* Additional payment method selection could go here */}
                                 </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group card-label mb-3">
-                                    <label htmlFor="expiry_month">Expiry Month</label>
-                                    <input className="form-control" id="expiry_month" value={expiredMonth && expiredMonth} placeholder="MM" type="number" onChange={(e) => handleChange(e)} name='expiredMonth' />
+                                <div className="col-md-6">
+                                    <div className="form-group card-label mb-3">
+                                        <label htmlFor="card_name">Name on Card</label>
+                                        <input className="form-control" id="card_name" value={nameOnCard} type="text" onChange={(e) => handleChange(e)} name='nameOnCard' />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group card-label mb-3">
-                                    <label htmlFor="expiry_year">Expiry Year</label>
-                                    <input className="form-control" id="expiry_year" value={cardExpiredYear && cardExpiredYear} placeholder="YY" type="number" onChange={(e) => handleChange(e)} name='cardExpiredYear' />
+                                <div className="col-md-6">
+                                    <div className="form-group card-label mb-3">
+                                        <label htmlFor="card_number">Card Number</label>
+                                        <CardElement className="form-control" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group card-label mb-3">
-                                    <label htmlFor="cvv">CVV</label>
-                                    <input className="form-control" id="cvv" type="number" value={cvv && cvv} onChange={(e) => handleChange(e)} name='cvv' />
+                                {/* Terms acceptance */}
+                                <div className="terms-accept">
+                                    <div className="custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            id="terms_accept"
+                                            className='me-2'
+                                            checked={isCheck}
+                                            onChange={handleCheck} />
+                                        <label htmlFor="terms_accept">
+                                            I have read and accept <a className='text-primary' style={{ cursor: 'pointer', textDecoration: 'none' }}>Terms &amp; Conditions</a>
+                                        </label>
+                                    </div>
                                 </div>
+                                {/* Remove the Pay Now button */}
                             </div>
-                        </div>
-
-                        <div className="d-flex gap-2 mt-3 mb-3">
-                            <div>
-                                <input type="radio"
-                                    name="paymentMethod"
-                                    value="paypal"
-                                    onChange={(e) => handleChange(e)}
-                                    checked={paymentMethod === 'paypal'}
-                                />
-                                <span className="checkmark ms-3"></span>
-                                Paypal
-                            </div>
-                            <div>
-                                <input type="radio"
-                                    name="paymentMethod"
-                                    value="payoneer"
-                                    onChange={(e) => handleChange(e)}
-                                    checked={paymentMethod === 'payoneer'}
-                                />
-                                <span className="checkmark ms-3"></span>
-                                Payoneer
-                            </div>
-                        </div>
-                        <div className="terms-accept">
-                            <div className="custom-checkbox">
-                                <input
-                                    type="checkbox"
-                                    id="terms_accept" className='me-2'
-                                    checked={isCheck}
-                                    onChange={handleCheck} />
-                                <label htmlFor="terms_accept"> I have read and accept <a className='text-primary' style={{ cursor: 'pointer', textDecoration: 'none' }}>Terms &amp; Conditions</a></label>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
@@ -134,13 +119,13 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
                             <ul className="booking-fee">
                                 <li>Consulting Fee <span>${price}</span></li>
                                 <li>Booking Fee <span>$10</span></li>
-                                <li>Vat (Including 15%) <span>$ {vat}</span></li>
+                                <li>Vat (Including 15%) <span>${vat.toFixed(2)}</span></li>
                             </ul>
 
                             <ul className="booking-total">
                                 <li className='d-flex justify-content-between'>
                                     <span className='fw-bold'>Total</span>
-                                    <span className="total-cost" style={{ color: '#1977cc' }}>${(Number(price) + 10 + vat)}</span>
+                                    <span className="total-cost" style={{ color: '#1977cc' }}>${totalAmount.toFixed(2)}</span>
                                 </li>
                             </ul>
                         </div>
@@ -148,6 +133,7 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
+
 export default CheckoutPage;

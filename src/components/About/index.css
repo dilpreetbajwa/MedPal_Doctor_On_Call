@@ -1,3 +1,4 @@
+
 .award-img {
     height: 120px;
     margin-bottom: 10px;
@@ -21,3 +22,165 @@
     content: "";
     background: url("../../images/doc/doc4.jpg") no-repeat 50% 50%;
 }
+
+.testimonials-container {
+    max-width: 1200px; /* Adjust based on your layout */
+    margin: 0 auto;
+    padding: 0 21px;
+    margin-bottom: 20px; /* Adjust based on lg:mb-[149px] if needed */
+}
+
+.testimonials-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.appointment-title {
+    font-size: 1.25rem; /* Adjust based on text-xl */
+    font-weight: bold;
+    color: var(--theme-2nd); /* Use your theme color */
+    margin-bottom: 22px;
+}
+
+.testimonial-title {
+    font-size: 2.25rem; /* Adjust based on text-4xl */
+    color: var(--theme-3rd); /* Use your theme color */
+    font-weight: normal;
+    line-height: 1.25;
+}
+
+.quote-image {
+    width: 6rem; /* Adjust based on w-24 */
+}
+
+@media (min-width: 1024px) {
+    .quote-image {
+        width: 12rem; /* Adjust based on lg:w-48 */
+    }
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 10px; /* Adjust based on gap-10 */
+}
+
+@media (min-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px; /* Adjust based on md:gap-14 */
+    }
+}
+
+@media (min-width: 1024px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Testimonial Card Styles */
+.testimonial-card {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Adjust as needed */
+    border-radius: 18px;
+    padding: 2rem; /* Adjust based on px-8 py-9 */
+}
+
+.testimonial-review {
+    margin-bottom: 2.375rem; /* Adjust based on mb-[38px] */
+    font-size: 1rem; /* Adjust based on text-base */
+    line-height: 1.5; /* Adjust based on leading-[21px] */
+    color: black;
+}
+
+.testimonial-footer {
+    display: flex;
+    gap: 0.875rem; /* Adjust based on gap-[14px] */
+    align-items: center;
+}
+
+.testimonial-image {
+    width: 75px; /* Adjust based on w-[75px] */
+    border-radius: 50%; /* For circular image */
+    border: 2px solid var(--theme-2nd); /* Use your theme color */
+    padding: 2px; /* Ring offset */
+}
+
+.testimonial-name {
+    font-weight: bold; /* Optional for better emphasis */
+}
+
+.testimonial-location {
+    color: gray; /* Adjust for visibility */
+}
+
+/* Opening Box Styles */
+.opening-box-container {
+    padding: 20px 0; /* Add padding for the opening box section */
+}
+
+.opening-box-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px; /* Adjust spacing between boxes */
+}
+
+@media (min-width: 768px) {
+    .opening-box-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .opening-box-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.opening-box {
+    text-align: white;
+    padding-top: 1.25rem; /* pt-5 */
+    padding-bottom: 2rem; /* pb-8 */
+    padding-left: 1.125rem; /* pl-[18px] */
+    padding-right: 0.8125rem; /* pr-[13px] */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* shadow-xl */
+    display: flex;
+    gap: 22px; /* gap-[22px] */
+    align-items: center;
+    flex-direction: column; /* flex-col */
+    border-radius: 14px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transition properties */
+
+}
+
+.opening-box img {
+    width: 40px; /* Adjust icon size */
+}
+
+.opening-box-title {
+    font-weight: bold; /* Font weight */
+    font-size: 22px; /* Adjust based on text size */
+    margin-bottom: 15px; /* mb-[15px] */
+    line-height: 1.5; /* Adjust line height */
+}
+
+.opening-box p {
+    margin: 0; /* Reset margin */
+}
+
+/* Background classes */
+.opening-box-gradient {
+    background: linear-gradient(45deg, #269bb1, transparent);
+}
+
+.opening-box-theme {
+    background: linear-gradient(45deg, #272b41, transparent);
+}
+
+.opening-box:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Lighten background on hover */
+    transform: scale(1.05); /* Slightly enlarge the box */
+}
+
+/* Add any additional styles as needed */
