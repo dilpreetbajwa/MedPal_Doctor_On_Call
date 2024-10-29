@@ -65,7 +65,7 @@ h6 {
 }
 
 a {
-    color: #2E3842;
+    color: #2e3842;
     text-decoration: none;
 }
 
@@ -85,7 +85,7 @@ a:focus {
     flex-direction: column !important;
 }
 
-.card-label>label {
+.card-label > label {
     background-color: #f8f9fa;
     color: #959595;
     display: inline-block;
@@ -93,23 +93,25 @@ a:focus {
     font-weight: 500;
     margin: 6px auto auto 8px;
     padding: 0 7px;
+    z-index: 1;
 }
 
-.card-label>input {
+.card-label > input,
+select {
     background-color: #fff;
     border: 1px solid #dbdbdb;
     border-radius: 4px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
     display: block;
     height: 50px;
     margin-top: -13px;
     padding: 5px 15px 0;
-    transition: border-color .3s;
+    transition: border-color 0.3s;
     width: 100%;
 }
 
 .btn-get-started {
-    font-family: "Raleway", sans-serif;
+    font-family: 'Raleway', sans-serif;
     text-transform: uppercase;
     font-weight: 500;
     font-size: 14px;
@@ -137,7 +139,7 @@ a:focus {
 }
 
 .section-title h2::before {
-    content: "";
+    content: '';
     position: absolute;
     display: block;
     width: 120px;
@@ -148,7 +150,7 @@ a:focus {
 }
 
 .section-title h2::after {
-    content: "";
+    content: '';
     position: absolute;
     display: block;
     width: 40px;
@@ -204,7 +206,7 @@ a:focus {
     margin: 0 auto;
     padding: 5px 10px;
     position: relative;
-    transition: .6s ease-in;
+    transition: 0.6s ease-in;
     text-align: center;
 }
 

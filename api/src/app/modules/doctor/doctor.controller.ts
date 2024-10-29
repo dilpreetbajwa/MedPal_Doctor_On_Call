@@ -8,13 +8,21 @@ import pick from '../../../shared/pick';
 import { IDoctorFiltersData, IDoctorOptions } from './doctor.interface';
 
 const createDoctor = catchAsync(async (req: Request, res: Response) => {
-    const result = await DoctorService.create(req.body);
-    sendResponse(res, {
-        statusCode: 200,
-        message: 'Successfully Doctor Created !!',
-        success: true,
-        data: result,
-    });
+    try {
+        const result = await DoctorService.create(req.body);
+        sendResponse(res, {
+            statusCode: 200,
+            message: 'Successfully Doctor Created !!',
+            success: true,
+            data: result,
+        });
+    } catch (err) {
+        sendResponse(res, {
+            statusCode: 400,
+            message: `${err ?? 'Error creating doctor!'}`,
+            success: false,
+        });
+    }
 });
 
 const getAllDoctors = catchAsync(async (req: Request, res: Response) => {

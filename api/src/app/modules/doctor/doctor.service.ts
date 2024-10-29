@@ -1,5 +1,5 @@
 import Doctor from './doctor.model';
-import { IDoctor } from './doctor.interface';
+import { IDoctor, IDoctorCreation } from './doctor.interface';
 import bcrypt from 'bcrypt';
 import ApiError from '../../../errors/apiError';
 import httpStatus from 'http-status';
@@ -44,22 +44,52 @@ const sendVerificationEmail = async (data: IDoctor) => {
     }
 };
 
-const create = async (payload: any): Promise<any> => {
-    const { password, firstName, lastName, email } = payload;
-
-    if (!password || !firstName || !lastName || !email) {
+const create = async (payload: IDoctorCreation): Promise<IDoctor> => {
+    const {
+        password,
+        firstName,
+        lastName,
+        email,
+        designation,
+        specialization,
+        price,
+        clinicAddress,
+        clinicName,
+        gender,
+    } = payload;
+    console.log('payload: ', payload);
+    if (
+        !password ||
+        !firstName ||
+        !lastName ||
+        !email ||
+        !designation ||
+        !price ||
+        !clinicAddress ||
+        !clinicName ||
+        !gender
+    ) {
+        console.log('invalid values');
         throw new Error('Invalid values !!');
     }
 
     const existEmail = await AuthUser.findOne({ email: email });
+    console.log('existEmail', existEmail);
 
     if (existEmail) {
+        console.log('{ email: email }', { email: email });
         throw new Error('Email Already Exist !!');
     }
     const doctor = await Doctor.create({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
+        firstName,
+        lastName,
+        email,
+        designation,
+        specialization,
+        price: price,
+        clinicAddress,
+        clinicName,
+        gender,
     });
 
     await AuthUser.create({
