@@ -60,6 +60,7 @@ export interface IDoctorCreation {
     clinicName: string;
     services: string;
     gender: string;
+    biography: string;
 }
 
 export const IDoctorFiltersData = [

@@ -22,7 +22,7 @@ mongoose.set('strictQuery', true);
 
 const connect = async () => {
     try {
-        await mongoose.connect(config.mongoUrl ?? 'mongodb://localhost:27017');
+        await mongoose.connect(config.mongoLocalUrl ?? 'mongodb://localhost:27017');
         console.log('Connected to mongoDB!');
     } catch (error) {
         console.log('database connection error: ', error);

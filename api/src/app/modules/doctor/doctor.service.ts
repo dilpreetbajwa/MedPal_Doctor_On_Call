@@ -56,8 +56,9 @@ const create = async (payload: IDoctorCreation): Promise<IDoctor> => {
         clinicAddress,
         clinicName,
         gender,
+        biography,
     } = payload;
-    console.log('payload: ', payload);
+
     if (
         !password ||
         !firstName ||
@@ -67,17 +68,16 @@ const create = async (payload: IDoctorCreation): Promise<IDoctor> => {
         !price ||
         !clinicAddress ||
         !clinicName ||
-        !gender
+        !gender ||
+        !biography
     ) {
         console.log('invalid values');
         throw new Error('Invalid values !!');
     }
 
     const existEmail = await AuthUser.findOne({ email: email });
-    console.log('existEmail', existEmail);
 
     if (existEmail) {
-        console.log('{ email: email }', { email: email });
         throw new Error('Email Already Exist !!');
     }
     const doctor = await Doctor.create({
@@ -86,10 +86,11 @@ const create = async (payload: IDoctorCreation): Promise<IDoctor> => {
         email,
         designation,
         specialization,
-        price: price,
+        price,
         clinicAddress,
         clinicName,
         gender,
+        biography,
     });
 
     await AuthUser.create({

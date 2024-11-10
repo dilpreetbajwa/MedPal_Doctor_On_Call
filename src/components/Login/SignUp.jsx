@@ -20,6 +20,8 @@ const SignUp = ({ setSignUp }) => {
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const { TextArea } = Input;
+
     const formField = {
         firstName: '',
         lastName: '',
@@ -82,7 +84,6 @@ const SignUp = ({ setSignUp }) => {
 
         // Patient account
         if (pIsError && pError) {
-            console.log('pIsError', pIsError, pError);
             message.error('Email Already Exist !!');
             setLoading(false);
         }
@@ -161,23 +162,21 @@ const SignUp = ({ setSignUp }) => {
     };
     const hanldeOnSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
 
         if (userType === 'doctor') {
             setIsModalOpen(true);
         } else {
+            setLoading(true);
             patientSignUp(user);
         }
     };
-    // console.log(user);
+
     const handleMoreDetails = (e) => {
         const { name, value } = e?.target || {};
-        if (name && value) {
-            setUser((user) => ({
-                ...user,
-                [name]: value,
-            }));
-        }
+        setUser((user) => ({
+            ...user,
+            [name]: value,
+        }));
     };
 
     return (
@@ -309,11 +308,27 @@ const SignUp = ({ setSignUp }) => {
                     setIsModalOpen(false);
                 }}
                 handleOk={() => {
+                    console.log('user from modal: ', user);
                     doctorSignUp(user);
                 }}
                 okText={'Submit'}
             >
                 <form className="row form-row" onSubmit={() => {}}>
+                    <div className="form-group mb-2 card-label">
+                        <label className="position-relative">
+                            About you <span className="text-danger">*</span>
+                        </label>
+                        <TextArea
+                            name="biography"
+                            className="form-control"
+                            style={{ marginTop: '-13px' }}
+                            rows={4}
+                            maxLength={200}
+                            value={user.biography}
+                            onChange={handleMoreDetails}
+                        />
+                    </div>
+
                     <div className="col-md-6">
                         <div className="form-group mb-2 card-label">
                             <label className="position-relative">

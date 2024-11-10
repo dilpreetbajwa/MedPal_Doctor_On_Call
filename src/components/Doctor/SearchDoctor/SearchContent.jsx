@@ -30,10 +30,11 @@ const SearchContent = ({ data }) => {
                         </h5>
 
                         {data?.designation ? (
-                            <p className="mb-3 form-text">{data.designation}</p>
+                            <p className="mb-1 form-text">{data.designation}</p>
                         ) : (
-                            <div className="mb-3 form-text">Doctor</div>
+                            <p className="mb-1 form-text">Doctor</p>
                         )}
+                        <div className="form-text">{data?.biography ?? ''}</div>
 
                         <div className="mt-auto">
                             {data?.specialization && (
