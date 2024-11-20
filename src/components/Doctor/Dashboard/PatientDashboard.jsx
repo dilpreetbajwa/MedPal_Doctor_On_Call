@@ -1,13 +1,16 @@
 import React from 'react';
 import img from '../../../images/dummy_pic1.png';
 import moment from 'moment';
-import { useGetPatientAppointmentsQuery, useGetPatientInvoicesQuery } from '../../../redux/api/appointmentApi';
+import {
+    useGetPatientAppointmentsQuery,
+    useGetPatientInvoicesQuery,
+} from '../../../redux/api/appointmentApi';
 import { useGetPatientPrescriptionQuery } from '../../../redux/api/prescriptionApi';
 import { Button, Tabs, Tag, Tooltip } from 'antd';
 import CustomTable from '../../UI/component/CustomTable';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { FaRegEye } from "react-icons/fa";
+import { FaRegEye } from 'react-icons/fa';
 import { clickToCopyClipBoard } from '../../../utils/copyClipBoard';
 
 const PatientDashboard = () => {
@@ -27,38 +30,42 @@ const PatientDashboard = () => {
                             <img className="avatar-img rounded-circle" src={img} alt="" />
                         </div>
                         <div>
-                            <h6 className='text-nowrap mb-0'>{data?.appointment?.doctorId?.firstName + ' ' + data?.appointment?.doctorId?.lastName}</h6>
-                            <p className='form-text'>{data?.appointment?.doctorId?.designation}</p>
+                            <h6 className="text-nowrap mb-0">
+                                {data?.appointment?.doctorId?.firstName +
+                                    ' ' +
+                                    data?.appointment?.doctorId?.lastName}
+                            </h6>
+                            <p className="form-text">{data?.appointment?.doctorId?.designation}</p>
                         </div>
                     </div>
-                )
-            }
+                );
+            },
         },
         {
             title: 'Total Paid',
             key: 2,
             width: 100,
-            dataIndex: "totalAmount"
+            dataIndex: 'totalAmount',
         },
         {
             title: 'Paid On',
             key: 3,
             width: 100,
             render: function (data) {
-                return <div>{moment(data?.createdAt).format("LL")}</div>
-            }
+                return <div>{moment(data?.createdAt).format('LL')}</div>;
+            },
         },
         {
             title: 'Payment Method',
             key: 4,
             width: 100,
-            dataIndex: "paymentMethod"
+            dataIndex: 'paymentMethod',
         },
         {
             title: 'Payment Type',
             key: 4,
             width: 100,
-            dataIndex: "paymentType"
+            dataIndex: 'paymentType',
         },
         {
             title: 'Action',
@@ -67,11 +74,12 @@ const PatientDashboard = () => {
             render: function (data) {
                 return (
                     <Link to={`/booking/invoice/${data?.appointment?._id}`}>
-                        <Button type='primary' size='medium'>View</Button>
-
+                        <Button type="primary" size="medium">
+                            View
+                        </Button>
                     </Link>
-                )
-            }
+                );
+            },
         },
     ];
     const prescriptionColumns = [
@@ -80,32 +88,44 @@ const PatientDashboard = () => {
             key: 11,
             width: 150,
             render: function (data) {
-                return <>
-                    <div className="avatar avatar-sm mr-2 d-flex gap-2">
-                        <div>
-                            <img className="avatar-img rounded-circle" src={img} alt="" />
+                return (
+                    <>
+                        <div className="avatar avatar-sm mr-2 d-flex gap-2">
+                            <div>
+                                <img className="avatar-img rounded-circle" src={img} alt="" />
+                            </div>
+                            <div>
+                                <h6 className="text-nowrap mb-0">
+                                    {data?.doctorId?.firstName + ' ' + data?.doctorId?.lastName}
+                                </h6>
+                                <p className="form-text">{data?.doctorId?.designation}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h6 className='text-nowrap mb-0'>{data?.doctorId?.firstName + ' ' + data?.doctorId?.lastName}</h6>
-                            <p className='form-text'>{data?.doctorId?.designation}</p>
-                        </div>
-                    </div>
-                </>
-            }
+                    </>
+                );
+            },
         },
         {
             title: 'Appointment Id',
-            dataIndex: "appointment",
+            dataIndex: 'appointment',
             key: 1,
-            render: ({trackingId}) =>{
+            render: ({ trackingId }) => {
                 return (
                     <Tooltip title="Copy Tracking Id">
-                            <Button>
-                                <h6><Tag color="#87d068" className='ms-2 text-uppercase' onClick={() => clickToCopyClipBoard(trackingId)}>{trackingId}</Tag></h6>
-                            </Button>
-                        </Tooltip>
-                )
-            }
+                        <Button>
+                            <h6>
+                                <Tag
+                                    color="#87d068"
+                                    className="ms-2 text-uppercase"
+                                    onClick={() => clickToCopyClipBoard(trackingId)}
+                                >
+                                    {trackingId}
+                                </Tag>
+                            </h6>
+                        </Button>
+                    </Tooltip>
+                );
+            },
         },
 
         {
@@ -113,24 +133,33 @@ const PatientDashboard = () => {
             key: 12,
             width: 100,
             render: function (data) {
-                return <div>{moment(data?.appointment?.scheduleDate).format("LL")} <span className="d-block text-info">{data?.appointment?.scheduleTime}</span></div>
-            }
+                return (
+                    <div>
+                        {moment(data?.appointment?.scheduleDate).format('LL')}{' '}
+                        <span className="d-block text-info">{data?.appointment?.scheduleTime}</span>
+                    </div>
+                );
+            },
         },
         {
             title: 'Follow-Update',
-            dataIndex: "followUpdate",
+            dataIndex: 'followUpdate',
             key: 4,
             render: function (data) {
                 return <Tag color="#87d068">{dayjs(data).format('MMM D, YYYY hh:mm A')}</Tag>;
-            }
+            },
         },
         {
             title: 'Archived',
-            dataIndex: "isArchived",
+            dataIndex: 'isArchived',
             key: 4,
-            render: function ({isArchived}) {
-                return <Tag color={isArchived ? "#f50" : "#108ee9"}>{isArchived ? "Yes" :"Under Treatment"}</Tag>;
-            }
+            render: function ({ isArchived }) {
+                return (
+                    <Tag color={isArchived ? '#f50' : '#108ee9'}>
+                        {isArchived ? 'Yes' : 'Under Treatment'}
+                    </Tag>
+                );
+            },
         },
         {
             title: 'Action',
@@ -138,9 +167,14 @@ const PatientDashboard = () => {
             width: 100,
             render: function (data) {
                 return (
-                    <div className='d-flex'>
+                    <div className="d-flex">
                         <Link to={`/dashboard/prescription/${data.id}`}>
-                            <Button type='primary' size='small' className="bg-primary" style={{ margin: "5px 5px" }}>
+                            <Button
+                                type="primary"
+                                size="small"
+                                className="bg-primary"
+                                style={{ margin: '5px 5px' }}
+                            >
                                 <FaRegEye />
                             </Button>
                         </Link>
@@ -153,8 +187,8 @@ const PatientDashboard = () => {
                             <FaRegTimesCircle />
                         </Button> */}
                     </div>
-                )
-            }
+                );
+            },
         },
     ];
     const appointmentColumns = [
@@ -163,18 +197,22 @@ const PatientDashboard = () => {
             key: 20,
             width: 150,
             render: function (data) {
-                return <>
-                    <div className="avatar avatar-sm mr-2 d-flex gap-2">
-                        <div>
-                            <img className="avatar-img rounded-circle" src={img} alt="" />
+                return (
+                    <>
+                        <div className="avatar avatar-sm mr-2 d-flex gap-2">
+                            <div>
+                                <img className="avatar-img rounded-circle" src={img} alt="" />
+                            </div>
+                            <div>
+                                <h6 className="text-nowrap mb-0">
+                                    {data?.doctorId?.firstName + ' ' + data?.doctorId?.lastName}
+                                </h6>
+                                <p className="form-text">{data?.doctorId?.designation}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h6 className='text-nowrap mb-0'>{data?.doctorId?.firstName + ' ' + data?.doctorId?.lastName}</h6>
-                            <p className='form-text'>{data?.doctorId?.designation}</p>
-                        </div>
-                    </div>
-                </>
-            }
+                    </>
+                );
+            },
         },
         {
             title: 'App Date',
@@ -182,25 +220,28 @@ const PatientDashboard = () => {
             width: 100,
             render: function (data) {
                 return (
-                    <div>{moment(data?.scheduleDate).format("LL")} <span className="d-block text-info">{data?.scheduleTime}</span></div>
-                )
-            }
+                    <div>
+                        {moment(data?.scheduleDate).format('LL')}{' '}
+                        <span className="d-block text-info">{data?.scheduleTime}</span>
+                    </div>
+                );
+            },
         },
         {
             title: 'Booking Date',
             key: 22,
             width: 100,
             render: function (data) {
-                return <div>{moment(data?.createdAt).format("LL")}</div>
-            }
+                return <div>{moment(data?.createdAt).format('LL')}</div>;
+            },
         },
         {
             title: 'Status',
             key: 24,
             width: 100,
             render: function (data) {
-                return <Tag color="#f50">{data?.status}</Tag>
-            }
+                return <Tag color="#f50">{data?.status}</Tag>;
+            },
         },
         {
             title: 'Action',
@@ -209,10 +250,10 @@ const PatientDashboard = () => {
             render: function (data) {
                 return (
                     <Link to={`/dashboard/appointments/${data._id}`}>
-                        <Button type='primary'>View</Button>
+                        <Button type="primary">View</Button>
                     </Link>
-                )
-            }
+                );
+            },
         },
     ];
 
@@ -220,43 +261,46 @@ const PatientDashboard = () => {
         {
             key: '1',
             label: 'Appointment',
-            children: <CustomTable
-                loading={pIsLoading}
-                columns={appointmentColumns}
-                dataSource={data}
-                showPagination={true}
-                pageSize={10}
-                showSizeChanger={true}
-            />,
+            children: (
+                <CustomTable
+                    loading={pIsLoading}
+                    columns={appointmentColumns}
+                    dataSource={data}
+                    showPagination={true}
+                    pageSize={10}
+                    showSizeChanger={true}
+                />
+            ),
         },
         {
             key: '2',
             label: 'Prescription',
-            children: <CustomTable
-                loading={prescriptionIsLoading}
-                columns={prescriptionColumns}
-                dataSource={prescriptionData}
-                showPagination={true}
-                pageSize={10}
-                showSizeChanger={true}
-            />
-
+            children: (
+                <CustomTable
+                    loading={prescriptionIsLoading}
+                    columns={prescriptionColumns}
+                    dataSource={prescriptionData}
+                    showPagination={true}
+                    pageSize={10}
+                    showSizeChanger={true}
+                />
+            ),
         },
         {
             key: '3',
             label: 'Billing',
-            children: <CustomTable
-                loading={InvoicesIsLoading}
-                columns={InvoiceColumns}
-                dataSource={invoices}
-                showPagination={true}
-                pageSize={10}
-                showSizeChanger={true}
-            />
+            children: (
+                <CustomTable
+                    loading={InvoicesIsLoading}
+                    columns={InvoiceColumns}
+                    dataSource={invoices}
+                    showPagination={true}
+                    pageSize={10}
+                    showSizeChanger={true}
+                />
+            ),
         },
     ];
-    return (
-        <Tabs defaultActiveKey="1" items={items} />
-    )
-}
+    return <Tabs defaultActiveKey="1" items={items} />;
+};
 export default PatientDashboard;
