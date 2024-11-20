@@ -1,18 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import { FaBriefcase } from "react-icons/fa";
+import { FaBriefcase } from 'react-icons/fa';
+import { MdOutlineLocationOn } from 'react-icons/md';
+import { useGetDoctorTimeSlotQuery } from '../../../redux/api/timeSlotApi';
+const OverView = ({ doctorDetails }) => {
+    const [key, setKey] = useState('sunday');
+    const { data: timeSlots, refetch, isLoading, isError } = useGetDoctorTimeSlotQuery({ day: key });
+    console.log('doctorDetails: ', doctorDetails);
 
-const OverView = () => {
     return (
-        <div className="col-md-12 col-lg-9">
-            <div className='mb-3'>
-                <h5 className='overview-text'>About Me</h5>
-                <p className='text-secondary'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </div>
+        <div className=" rounded-3">
+            <div className="col-md-12">
+                <div className="mb-3 p-4 rounded-3" style={{ backgroundColor: '#f3f3f3' }}>
+                    <h4 className="overview-text">About Me</h4>
+                    <p className="text-secondary mb-3">{doctorDetails?.biography}</p>
 
-            <div>
-                <h5 className='overview-text'>Education</h5>
+                    <div className="mb-3">
+                        <h4 className="overview-text">Specialization</h4>
+                        <div className="text-secondary">{doctorDetails?.specialization}</div>
+                    </div>
+
+                    <h4 className="overview-text">Clinic</h4>
+                    {doctorDetails?.clinicName && doctorDetails?.clinicAddress ? (
+                        <div className="d-flex align-items-center ">
+                            <p className="text-secondary">{doctorDetails?.clinicName} @</p>
+                            <p className="text-secondary">{doctorDetails?.clinicAddress}</p>
+                        </div>
+                    ) : (
+                        <div className="text-muted">No Clinic information available</div>
+                    )}
+
+                    <div>
+                        <h4 className="overview-text">Contact Information</h4>
+                        <div className="text-secondary">{doctorDetails?.email}</div>
+                    </div>
+                </div>
+
+                <div className="mb-3 p-4 rounded-3" style={{ backgroundColor: '#f3f3f3' }}>
+                    <h4 className="overview-text">Availability</h4>
+                    <div>
+                        {timeSlots?.length === 0 ? (
+                            <div className="text-muted">
+                                No available time slots at the moment. Please check back later or contact
+                                the clinic for assistance.
+                            </div>
+                        ) : (
+                            // TODO: Need UI to display timeslots
+                            <div>Need UI to display timeslots</div>
+                        )}
+                    </div>
+                </div>
+
+                {/* <div>
+                <h5 className="overview-text">Education</h5>
 
                 <VerticalTimeline>
                     <VerticalTimelineElement
@@ -26,10 +67,10 @@ const OverView = () => {
                         <h5 className="text-white">American Dental Medical University</h5>
                         <h6 className="text-white">Miami, FL</h6>
                         <p style={{ fontSize: '14px' }}>
-                            Creative Direction, User Experience, Visual Design, Project Management, Team Leading
+                            Creative Direction, User Experience, Visual Design, Project Management, Team
+                            Leading
                         </p>
                     </VerticalTimelineElement>
-
 
                     <VerticalTimelineElement
                         className="vertical-timeline-element--work"
@@ -42,15 +83,14 @@ const OverView = () => {
                         <h5 className="text-white">American Dental Medical University</h5>
                         <h6 className="text-white">Miami, FL</h6>
                         <p style={{ fontSize: '14px' }}>
-                            Creative Direction, User Experience, Visual Design, Project Management, Team Leading
+                            Creative Direction, User Experience, Visual Design, Project Management, Team
+                            Leading
                         </p>
                     </VerticalTimelineElement>
-
                 </VerticalTimeline>
-
             </div>
-            <div className='my-5'>
-                <h5 className='overview-text'>Work & Experience</h5>
+            <div className="my-5">
+                <h5 className="overview-text">Work & Experience</h5>
 
                 <VerticalTimeline>
                     <VerticalTimelineElement
@@ -64,7 +104,8 @@ const OverView = () => {
                         <h5 className="text-white">Glowing Smiles Family Dental Clinic</h5>
                         <h6 className="text-white">Miami, FL</h6>
                         <p style={{ fontSize: '14px' }}>
-                            Creative Direction, User Experience, Visual Design, Project Management, Team Leading
+                            Creative Direction, User Experience, Visual Design, Project Management, Team
+                            Leading
                         </p>
                     </VerticalTimelineElement>
 
@@ -79,7 +120,8 @@ const OverView = () => {
                         <h5 className="text-white">Comfort Care Dental Clinic</h5>
                         <h6 className="text-white">Miami, FL</h6>
                         <p style={{ fontSize: '14px' }}>
-                            Creative Direction, User Experience, Visual Design, Project Management, Team Leading
+                            Creative Direction, User Experience, Visual Design, Project Management, Team
+                            Leading
                         </p>
                     </VerticalTimelineElement>
 
@@ -93,17 +135,15 @@ const OverView = () => {
                     >
                         <h5 className="text-white">Dream Smile Dental Practice</h5>
                         <h6 className="text-white">Miami, FL</h6>
-                        <p style={{ fontSize: '14px' }}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, dignissimos.</p>
+                        <p style={{ fontSize: '14px' }}>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur,
+                            dignissimos.
+                        </p>
                     </VerticalTimelineElement>
-
-
-                  
-
                 </VerticalTimeline>
-                
             </div>
-            <div >
-                <h5 className='overview-text'>Awards</h5>
+            <div>
+                <h5 className="overview-text">Awards</h5>
 
                 <VerticalTimeline>
                     <VerticalTimelineElement
@@ -116,7 +156,10 @@ const OverView = () => {
                     >
                         <h5 className="text-white">Humanitarian Award</h5>
                         <h6 className="text-white">Miami, FL</h6>
-                        <p style={{ fontSize: '14px' }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a ipsum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+                        <p style={{ fontSize: '14px' }}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a ipsum tellus.
+                            Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                        </p>
                     </VerticalTimelineElement>
 
                     <VerticalTimelineElement
@@ -129,7 +172,10 @@ const OverView = () => {
                     >
                         <h5 className="text-white">Certificate for International Volunteer Service</h5>
                         <h6 className="text-white">Miami, FL</h6>
-                        <p style={{ fontSize: '14px' }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a ipsum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+                        <p style={{ fontSize: '14px' }}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a ipsum tellus.
+                            Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                        </p>
                     </VerticalTimelineElement>
 
                     <VerticalTimelineElement
@@ -142,13 +188,15 @@ const OverView = () => {
                     >
                         <h5 className="text-white">The Dental Professional of The Year Award</h5>
                         <h6 className="text-white">Miami, FL</h6>
-                        <p style={{ fontSize: '14px' }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a ipsum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+                        <p style={{ fontSize: '14px' }}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a ipsum tellus.
+                            Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                        </p>
                     </VerticalTimelineElement>
-
                 </VerticalTimeline>
             </div>
             <div>
-                <h5 className='overview-text'>Services</h5>
+                <h5 className="overview-text">Services</h5>
                 <ul>
                     <li>Tooth cleaning </li>
                     <li>Root Canal Therapy</li>
@@ -159,7 +207,7 @@ const OverView = () => {
                 </ul>
             </div>
             <div>
-                <h5 className='overview-text'>Specializations</h5>
+                <h5 className="overview-text">Specializations</h5>
                 <ul className="clearfix">
                     <li>Children Care</li>
                     <li>Dental Care</li>
@@ -168,8 +216,9 @@ const OverView = () => {
                     <li>Periodontist</li>
                     <li>Prosthodontics</li>
                 </ul>
+            </div> */}
             </div>
         </div>
-    )
-}
+    );
+};
 export default OverView;

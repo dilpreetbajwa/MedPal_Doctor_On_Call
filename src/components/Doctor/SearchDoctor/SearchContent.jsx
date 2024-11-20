@@ -9,6 +9,8 @@ import { ImLocation } from 'react-icons/im';
 import { truncate } from '../../../utils/truncate';
 
 const SearchContent = ({ data }) => {
+    console.log('SearchContent: ', data);
+
     const services = data?.services?.split(',') ?? [];
     const defaultUserUrl = process.env.REACT_APP_DEFAULT_USER_IMAGE;
     return (
