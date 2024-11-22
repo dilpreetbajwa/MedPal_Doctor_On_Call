@@ -1,3 +1,4 @@
+import SocialSignUp from "../../components/Login/SocialSignUp";
 import { setUserInfo } from "../../utils/local-storage";
 import { baseApi } from "./baseApi";
 
@@ -18,6 +19,35 @@ export const authApi = baseApi.injectEndpoints({
         } catch (error) {}
       },
     }),
+    //  changed for social sign in
+    socialSignUp: build.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/social-login`,
+        method: "POST",
+        data,
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = (await queryFulfilled).data;
+          setUserInfo({ accessToken: result.accessToken });
+        } catch (error) {}
+      },
+    }),
+
+    newUserSocialSignup: build.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/social-signup`,
+        method: "POST",
+        data,
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = (await queryFulfilled).data;
+          setUserInfo({ accessToken: result.accessToken });
+        } catch (error) {}
+      },
+    }),
+
     patientSignUp: build.mutation({
       query: (data) => ({
         url: `/patient`,
@@ -58,6 +88,8 @@ export const authApi = baseApi.injectEndpoints({
 
 export const {
   useUserLoginMutation,
+  useSocialSignUpMutation,
+  useNewUserSocialSignupMutation,
   useDoctorSignUpMutation,
   usePatientSignUpMutation,
   useResetPasswordMutation,
