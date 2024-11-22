@@ -15,10 +15,11 @@ import { Modal, Button } from "react-bootstrap"; // For modal
 const SocialSignUp = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [newUser, setNewUser] = useState(false);
+  //   const [newUser, setNewUser] = useState(false);
   const [tokenId, setTokenId] = useState(null);
   const [authType, setAuthType] = useState("");
   const [showModal, setShowModal] = useState(false); // for role selection
+  const [showForm, setShowForm] = useState(false); // for entering details
   const navigate = useNavigate();
   const [socialSignUp] = useSocialSignUpMutation();
   const [newUserSocialSignup] = useNewUserSocialSignupMutation();
@@ -46,7 +47,7 @@ const SocialSignUp = () => {
       const res = await socialSignUp({ token: idToken, authType: "google" });
       if (res.data.isNewUser) {
         setTokenId(idToken);
-        setNewUser(true);
+        // setNewUser(true);
         setAuthType("google");
         setShowModal(true); // open the modal
         // }
@@ -81,7 +82,7 @@ const SocialSignUp = () => {
       const res = await socialSignUp({ token: idToken, authType: "facebook" });
       if (res.data.isNewUser) {
         setTokenId(idToken);
-        setNewUser(true);
+        // setNewUser(true);
         setAuthType("facebook");
         setShowModal(true); // open the modal
         // }
@@ -112,11 +113,12 @@ const SocialSignUp = () => {
         authType: authType,
       });
       console.log("role selection", res);
-      setNewUser(false);
+      //   setNewUser(false);
       setTokenId(null);
       setAuthType("");
       setShowModal(false); // close the modal
-      navigate("/");
+      setShowForm(true); // open the form
+      //   navigate("/");
     } catch (error) {
       console.log("Error in Social SignIn", error);
     }
@@ -173,6 +175,14 @@ const SocialSignUp = () => {
             </button>
           </div>
         </Modal.Body>
+      </Modal>
+
+      {/* Modal for doctors profile form */}
+      <Modal show={showForm} onHide={() => setShowForm(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>We would like to know more!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{/* add body */}</Modal.Body>
       </Modal>
     </div>
   );
