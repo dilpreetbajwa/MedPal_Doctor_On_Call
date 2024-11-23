@@ -7,10 +7,14 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebase";
 import { browserPopupRedirectResolver } from "firebase/auth";
-import { useSocialSignUpMutation } from "../../redux/api/authApi";
-import { useNewUserSocialSignupMutation } from "../../redux/api/authApi";
+import {
+  useSocialSignUpMutation,
+  useNewUserSocialSignupMutation,
+  useDoctorSignUpMutation,
+} from "../../redux/api/authApi";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap"; // For modal
+import DoctorFormModal from "./DoctorFormModal";
 
 const SocialSignUp = () => {
   const [error, setError] = useState("");
@@ -23,6 +27,7 @@ const SocialSignUp = () => {
   const navigate = useNavigate();
   const [socialSignUp] = useSocialSignUpMutation();
   const [newUserSocialSignup] = useNewUserSocialSignupMutation();
+  const [doctorSignUp] = useDoctorSignUpMutation(); // this
 
   const handleGoogleSignIn = async () => {
     // changes to be done. Error facing has request action is invalid
@@ -107,23 +112,45 @@ const SocialSignUp = () => {
   const handleRoleSelection = async (input) => {
     try {
       console.log("Role selected ->", input);
-      const res = await newUserSocialSignup({
-        token: tokenId,
-        role: input,
-        authType: authType,
-      });
-      console.log("role selection", res);
-      //   setNewUser(false);
-      setTokenId(null);
-      setAuthType("");
-      setShowModal(false); // close the modal
-      setShowForm(true); // open the form
-      //   navigate("/");
+      if (input == "doctor") {
+        setShowModal(false); // close the modal
+        setShowForm(true); // open the form
+      } else {
+        const res = await newUserSocialSignup({
+          token: tokenId,
+          role: input,
+          authType: authType,
+        });
+
+        setTokenId(null);
+        setAuthType("");
+        setShowModal(false); // close the modal
+        setShowForm(false);
+        navigate("/");
+      }
+      //   const res = await newUserSocialSignup({
+      //     token: tokenId,
+      //     role: input,
+      //     authType: authType,
+      //   });
+      //   console.log("role selection", res);
+      //   //   setNewUser(false);
+      //   setTokenId(null);
+      //   setAuthType("");
+      //   setShowModal(false); // close the modal
+      //   setShowForm(true); // open the form
+      //   //   navigate("/");
     } catch (error) {
       console.log("Error in Social SignIn", error);
     }
   };
-
+  const doctorSignUpFunc = async (data) => {
+    try {
+      const res = await doctorSignUp(data);
+    } catch (error) {
+      console.log("Error in Social SignIn", error);
+    }
+  };
   return (
     <div>
       <div className="social-media">
@@ -178,12 +205,18 @@ const SocialSignUp = () => {
       </Modal>
 
       {/* Modal for doctors profile form */}
-      <Modal show={showForm} onHide={() => setShowForm(false)} centered>
+
+      {/* <Modal show={showForm} onHide={() => setShowForm(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>We would like to know more!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{/* add body */}</Modal.Body>
-      </Modal>
+        <Modal.Body></Modal.Body>
+      </Modal> */}
+      <DoctorFormModal
+        showForm={showForm}
+        setShowForm={setShowForm}
+        doctorSignUp={doctorSignUpFunc}
+      />
     </div>
   );
 };
