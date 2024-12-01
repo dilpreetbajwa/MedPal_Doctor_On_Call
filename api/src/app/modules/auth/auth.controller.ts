@@ -12,6 +12,7 @@ import Doctor from "../../models/doctor.model";
 
 const Login = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.loginUser(req.body);
+  console.log("........", result);
   const { accessToken } = result;
 
   const cookieOptions = {

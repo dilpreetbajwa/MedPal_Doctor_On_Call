@@ -16,7 +16,7 @@ import ForgotPassword from "../../models/forgotpassword.model";
 import admin from "../../../helpers/firebase";
 
 type ILginResponse = {
-  accessToken?: string;
+  accessToken?: string | null;
   user: {};
 };
 
@@ -135,13 +135,15 @@ const socialLogin = async (
 
       return { accessToken, user: { role, userId } };
     } else {
-      //  redirect to a page to ask whether the user is patient or doctor
-      //  create authUSser
-      //  create patient or doctor
-      //  return jwt token
+      // return { user: {} };
 
-      //  user doesnt exist
-      return { user: {} };
+      return {
+        accessToken: null,
+        user: {
+          role: null,
+          userId: null,
+        },
+      };
       // throw new ApiError(httpStatus.NOT_FOUND, "User is not Exist !");
     }
   } catch (error) {
@@ -151,36 +153,6 @@ const socialLogin = async (
       "Error logging in user"
     );
   }
-  //   1.  verify token
-  //   2.   get user data from token
-  //   name , email,
-  //   3.  check if user exists in db
-  // in doctor and patient table
-  //   4. if user exists, return user data
-  //   5. if user does not exist, create user in db and return user data
-  // redirect to a page or pop up to a page and then automatically closes where i will ask user whether you want to be a doctor or patient and then i will create users in db
-  //   6. return user data
-  //   7. catch error and return error message
-  //   //    to avoid error. I have to remove it
-  /* 
-  {
-  user: {
-    name: 'ANITH CHERIAN JOY',
-    picture: 'https://lh3.googleusercontent.com/a/ACg8ocIQ6ldq00sPiKZAAjVSMEC8437lvB6YgvXAdcxQcQkAAydRQ3nt=s96-c',
-    iss: 'https://securetoken.google.com/fir-project-e47ae',
-    aud: 'fir-project-e47ae',
-    auth_time: 1731026135,
-    user_id: 'SlWLoUDDYeh1SS6KXIByDEHtL743',
-    sub: 'SlWLoUDDYeh1SS6KXIByDEHtL743',
-    iat: 1731026135,
-    exp: 1731029735,
-    email: 'anithjoy1@gmail.com',
-    email_verified: true,
-    firebase: { identities: [Object], sign_in_provider: 'google.com' },
-    uid: 'SlWLoUDDYeh1SS6KXIByDEHtL743'
-  }
-  }
-  */
 };
 
 //  create new social login
@@ -204,20 +176,40 @@ const createSocialLogin = async (body: any): Promise<ILginResponse> => {
       const firstName = names[0] || "";
       const lastName = names.slice(1).join(" ") || "";
       if (role === "doctor") {
-        const doctor = await Doctor.create({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-        });
+        if (body && body.data) {
+          const {
+            designation,
+            specialization,
+            price,
+            clinicAddress,
+            clinicName,
+            gender,
+            biography,
+          } = body.data;
 
-        userId = doctor.id;
-        await AuthUser.create({
-          email: doctor.email,
-          password: "firebaseUser",
-          role: "doctor",
-          userId: doctor.id,
-          authType: authType,
-        });
+          const doctor = await Doctor.create({
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
+            email: email,
+            clinicName: clinicName,
+            clinicAddress: clinicAddress,
+            designation: designation,
+            specialization: specialization,
+            price: price,
+            biography: biography,
+          });
+
+          userId = doctor.id;
+
+          await AuthUser.create({
+            email: doctor.email,
+            password: "firebaseUser",
+            role: "doctor",
+            userId: doctor.id,
+            authType: authType,
+          });
+        }
       } else {
         const patient = await Patient.create({
           firstName: firstName,
@@ -233,11 +225,6 @@ const createSocialLogin = async (body: any): Promise<ILginResponse> => {
           authType: authType,
         });
       }
-
-      //  redirect to a page to ask whether the user is patient or doctor
-      //  create authUSser
-      //  create patient or doctor
-      //  return jwt token
 
       const accessToken = JwtHelper.createToken(
         { role, userId },

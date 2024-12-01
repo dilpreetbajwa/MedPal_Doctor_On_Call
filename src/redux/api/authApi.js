@@ -19,7 +19,8 @@ export const authApi = baseApi.injectEndpoints({
         } catch (error) {}
       },
     }),
-    //  changed for social sign in
+
+    //  for social sign in
     socialSignUp: build.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/social-login`,
@@ -34,6 +35,7 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
 
+    //  for new user social sign up
     newUserSocialSignup: build.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/social-signup`,
