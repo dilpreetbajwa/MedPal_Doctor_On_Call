@@ -12,7 +12,6 @@ import Doctor from "../../models/doctor.model";
 
 const Login = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.loginUser(req.body);
-  console.log("........", result);
   const { accessToken } = result;
 
   const cookieOptions = {
@@ -30,7 +29,6 @@ const Login = catchAsync(async (req: Request, res: Response) => {
 
 //  will try to login return user details with token else will return empty user
 const socialLogin = catchAsync(async (req: Request, res: Response) => {
-  console.log("Running social login from backend", req.body);
   const token = req.body.token;
   const currentAuthType = req.body.authType;
   const result = await AuthService.socialLogin(token, currentAuthType);
@@ -63,7 +61,6 @@ const socialLogin = catchAsync(async (req: Request, res: Response) => {
 
 //  used for new user via social login
 const socialSignup = catchAsync(async (req: Request, res: Response) => {
-  console.log("social signup is running", req.body);
   const result = await AuthService.createSocialLogin(req.body);
   const { accessToken } = result;
 

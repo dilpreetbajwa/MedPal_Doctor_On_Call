@@ -90,13 +90,12 @@ const socialLogin = async (
 ): Promise<ILginResponse> => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log("Social login function: decodedToken -> ", decodedToken);
+
     const { name, email, uid } = decodedToken;
 
     let existingUser = await AuthUser.findOne({ email });
 
     if (existingUser) {
-      console.log("USers exist in the database", existingUser);
       const { role, userId, authType } = existingUser;
 
       if (role === "doctor") {
@@ -135,19 +134,18 @@ const socialLogin = async (
 
       return { accessToken, user: { role, userId } };
     } else {
-      // return { user: {} };
+      return { user: {} };
 
-      return {
-        accessToken: null,
-        user: {
-          role: null,
-          userId: null,
-        },
-      };
+      // return {
+      //   accessToken: null,
+      //   user: {
+      //     role: null,
+      //     userId: null,
+      //   },
+      // };
       // throw new ApiError(httpStatus.NOT_FOUND, "User is not Exist !");
     }
   } catch (error) {
-    console.error(error);
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       "Error logging in user"
@@ -157,7 +155,6 @@ const socialLogin = async (
 
 //  create new social login
 const createSocialLogin = async (body: any): Promise<ILginResponse> => {
-  console.log("auth.service body -> ", body);
   const token = body.token;
   const role = body.role;
   const authType = body.authType;
@@ -235,7 +232,6 @@ const createSocialLogin = async (body: any): Promise<ILginResponse> => {
       return { accessToken, user: { role, userId } };
     }
   } catch (error) {
-    console.error(error);
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       "Error logging in user"
