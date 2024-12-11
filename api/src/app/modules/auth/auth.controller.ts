@@ -26,6 +26,57 @@ const Login = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+//  will try to login return user details with token else will return empty user
+const socialLogin = catchAsync(async (req: Request, res: Response) => {
+  const token = req.body.token;
+  const currentAuthType = req.body.authType;
+  const result = await AuthService.socialLogin(token, currentAuthType);
+
+  const user = result.user;
+  const isEmpty = (obj: any) => Object.keys(obj).length === 0;
+
+  if (!user || isEmpty(user)) {
+    sendResponse(res, {
+      statusCode: 200,
+      message: "New User: Please select a role",
+      success: true,
+      data: { isNewUser: true },
+    });
+  } else {
+    const accessToken = result.accessToken;
+    const cookieOptions = {
+      secure: config.env === "production",
+      httpOnly: true,
+    };
+    res.cookie("accessToken", accessToken, cookieOptions);
+    sendResponse(res, {
+      statusCode: 200,
+      message: "Successfully Logged !!",
+      success: true,
+      data: result,
+    });
+  }
+});
+
+//  used for new user via social login
+const socialSignup = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.createSocialLogin(req.body);
+  const { accessToken } = result;
+
+  const cookieOptions = {
+    secure: config.env === "production",
+    httpOnly: true,
+  };
+  res.cookie("accessToken", accessToken, cookieOptions);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Successfully Logged !!",
+    success: true,
+    data: result,
+  });
+});
+
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.resetPassword(req.body);
   sendResponse(res, {
@@ -114,6 +165,8 @@ const VerficationExpired = catchAsync(async (req: Request, res: Response) => {
 export const AuthController = {
   Login,
   // VerifyUser,
+  socialLogin,
+  socialSignup,
   Verified,
   VerficationExpired,
   resetPassword,
